@@ -29,5 +29,11 @@ namespace LibraryApi.Extensions
                 .AddDefaultTokenProviders();
             return services;
         }
+
+        public static IServiceCollection RegisterServices(this IServiceCollection services)
+        {
+            services.AddTransient<DbContext, IdentityContext>();
+            return services;
+        }
     }
 }

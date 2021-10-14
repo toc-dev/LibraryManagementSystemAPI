@@ -28,6 +28,8 @@ namespace LibraryApi
         {
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
+            services.RegisterServices();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
