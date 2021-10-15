@@ -27,6 +27,12 @@ namespace LibraryApi.Extensions
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            });
+
             return services;
         }
 

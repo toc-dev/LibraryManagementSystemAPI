@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LibraryApi.Models.Configurations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,6 +16,7 @@ namespace LibraryApi.Models.Entities
             : base(options)
         {
         }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,6 +35,10 @@ namespace LibraryApi.Models.Entities
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.ToTable(name: "RoleClaims"));
 
             builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable(name: "UserTokens"));
+
+            builder.ApplyConfiguration<Category>(new CategoryConfiguration());
+            builder.ApplyConfiguration<Author>(new AuthorConfiguration());
+            builder.ApplyConfiguration<Book>(new BookConfiguration());
         }
 
         public DbSet<User> Users { get; set; }

@@ -11,8 +11,8 @@ namespace LibraryApi.Models.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        [ForeignKey(nameof(Book))]
         public Guid BookId { get; set; }
-        [ForeignKey(nameof(BookId))]
         public Book Book { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime DueDate { get; set; }
