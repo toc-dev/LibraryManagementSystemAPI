@@ -14,5 +14,7 @@ namespace LibraryApi.Models.Entities
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
+
+        //timestamps missing bro!
     }
 }

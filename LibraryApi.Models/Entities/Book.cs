@@ -17,6 +17,10 @@ namespace LibraryApi.Models.Entities
         [ForeignKey(nameof(Author))]
         public Guid AuthorId { get; set; }
         public Author Author { get; set; }
+
         public ICollection<Category> Categories { get; set; }
+        /// have only one category bro!
+        /// list of strings called catefories, Boook.Category.Contain("string")
+
     }
 }
