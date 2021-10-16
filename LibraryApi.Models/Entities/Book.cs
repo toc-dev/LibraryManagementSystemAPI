@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibraryApi.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Models.Entities
 {
-    public class Book
+    public class Book : ITracking
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -17,10 +18,10 @@ namespace LibraryApi.Models.Entities
         [ForeignKey(nameof(Author))]
         public Guid AuthorId { get; set; }
         public Author Author { get; set; }
-
-        public ICollection<Category> Categories { get; set; }
-        /// have only one category bro!
-        /// list of strings called catefories, Boook.Category.Contain("string")
-
+        public ICollection<string> Categories { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

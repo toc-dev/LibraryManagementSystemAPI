@@ -17,7 +17,6 @@ namespace LibraryApi.Models.Entities
         {
         }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

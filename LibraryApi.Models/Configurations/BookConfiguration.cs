@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace LibraryApi.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
+            builder.Ignore("Categories");
             builder.HasData
             (
                 new Book
@@ -22,6 +24,7 @@ namespace LibraryApi.Models.Configurations
                     ISBN = "56422299875",
                     YearPublished = new DateTime(2006, 12, 23),
                     AuthorId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                    Categories = new List<string>{ "Motivation", "Career"}
                 },
 
                 new Book
@@ -31,6 +34,7 @@ namespace LibraryApi.Models.Configurations
                     ISBN = "234977423470",
                     YearPublished = new DateTime(2018, 2, 18),
                     AuthorId = new Guid("c9d4c053-49b6-410c-bc78-2d54a9991870"),
+                    Categories = new List<string> { "Non-fiction", "Career" }
                 },
 
                 new Book
@@ -40,6 +44,7 @@ namespace LibraryApi.Models.Configurations
                     ISBN = "882457625741",
                     YearPublished = new DateTime(2008, 8, 13),
                     AuthorId = new Guid("fdb13789-066c-4a24-bbf9-08d98a14c243"),
+                    Categories = new List<string> { "Sales", "Career" }
                 },
 
                 new Book
@@ -49,6 +54,7 @@ namespace LibraryApi.Models.Configurations
                     ISBN = "536648497957",
                     YearPublished = new DateTime(2017, 9, 15),
                     AuthorId = new Guid("fdb13789-066c-4a24-bbf9-08d98a14c243"),
+                    Categories = new List<string> { "Sales", "Career" }
                 }
             );
         }

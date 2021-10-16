@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibraryApi.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Models.Entities
 {
-    public class Activity
+    public class Activity : ITracking
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
@@ -16,5 +17,9 @@ namespace LibraryApi.Models.Entities
         public Book Book { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime DueDate { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }
