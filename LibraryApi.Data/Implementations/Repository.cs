@@ -79,6 +79,14 @@ namespace LibraryApi.Data.Implementations
             return _dbSet.Any(predicate);
         }
 
+        public void Update(T obj)
+        {
+            _dbSet.Update(obj);
+        }
+        public void Delete(T obj)
+        {
+            _dbSet.Remove(obj);
+        }
        
     }
 }

@@ -28,7 +28,8 @@ namespace LibraryApi.Data.Interfaces
 
         bool Any(Expression<Func<T, bool>> predicate = null);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null);
-        
 
+        void Update(T obj);
+        void Delete(T obj);
     }
 }
