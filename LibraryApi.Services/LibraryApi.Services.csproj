@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\LibraryApi.Data\LibraryApi.Data.csproj" />
+    <ProjectReference Include="..\LibraryApi.Models\LibraryApi.Models.csproj" />
   </ItemGroup>
 
 </Project>

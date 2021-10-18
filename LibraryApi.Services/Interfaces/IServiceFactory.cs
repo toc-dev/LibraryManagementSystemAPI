@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Services.Interfaces
 {
-    class IServiceFactory
+    public interface IServiceFactory
     {
+        T GetService<T>() where T : class;
     }
 }
