@@ -49,7 +49,6 @@ namespace LibraryApi.Services.Implementations
         public void UpdateBook(Book book)
         {
             _bookRepo.Update(book);
-            _unitOfWork.SaveChanges();
         }
     }
 }
