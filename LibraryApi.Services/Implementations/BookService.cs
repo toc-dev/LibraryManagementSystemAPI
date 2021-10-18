@@ -37,15 +37,13 @@ namespace LibraryApi.Services.Implementations
 
         public async Task<Book> CreateBookAsync(Book book)
         {
-            await _bookRepo.AddAsync(book);
-            await _unitOfWork.SaveChangesAsync();
-
-            return book;
+            return await _bookRepo.AddAsync(book);
         }
 
         public void DeleteBook(Book book)
         {
             _bookRepo.Delete(book);
+            _unitOfWork.SaveChanges();
         }
 
         public void UpdateBook(Book book)
