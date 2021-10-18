@@ -7,6 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using LibraryApi.Data.Interfaces;
+using LibraryApi.Data.Implementations;
+using LibraryApi.Services.Interfaces;
+using LibraryApi.Services.Implementations;
 
 namespace LibraryApi.Extensions
 {
@@ -39,6 +43,11 @@ namespace LibraryApi.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<DbContext, IdentityContext>();
+            services.AddTransient<IUnitOfWork<IdentityContext>, UnitOfWork<IdentityContext>>();
+            services.AddTransient<IServiceFactory, ServiceFactory>();
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IUserService, UserService>();
             return services;
         }
     }
