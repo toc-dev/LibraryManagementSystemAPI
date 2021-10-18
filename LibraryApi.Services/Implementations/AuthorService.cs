@@ -19,12 +19,9 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork = unitOfWork;
             _authorRepo = unitOfWork.GetRepository<Author>();
         }
-        public async Task<Author> CreateAuthor(Author author)
+        public async Task<Author> CreateAuthorAsync(Author author)
         {
-            await _authorRepo.AddAsync(author);
-            await _unitOfWork.SaveChangesAsync();
-
-            return author;
+            return await _authorRepo.AddAsync(author);
         }
 
         public void DeleteAuthor(Author author)
@@ -37,7 +34,7 @@ namespace LibraryApi.Services.Implementations
             return await _authorRepo.GetByIdAsync(authorId);
         }
 
-        public async Task<IEnumerable<Author>> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthorsAsync()
         {
             return await _authorRepo.GetAllAsync();
         }
@@ -45,7 +42,6 @@ namespace LibraryApi.Services.Implementations
         public void UpdateAuthor(Author author)
         {
             _authorRepo.Update(author);
-            _unitOfWork.SaveChanges();
         }
     }
 }

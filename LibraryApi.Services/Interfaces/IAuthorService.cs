@@ -9,9 +9,9 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IAuthorService
     {
-        Task<Author> CreateAuthor(Author author);
+        Task<Author> CreateAuthorAsync(Author author);
         Task<Author> GetAuthorByIdAsync(Guid authorId);
-        Task<IEnumerable<Author>> GetAuthors();
+        Task<IEnumerable<Author>> GetAuthorsAsync();
         void UpdateAuthor(Author author);
         void DeleteAuthor(Author author);
     }
