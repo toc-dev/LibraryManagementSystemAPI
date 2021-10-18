@@ -15,6 +15,7 @@ namespace LibraryApi.Services.Implementations
         private readonly IServiceFactory _serviceFactory;
         private readonly IBookService _bookService;
         private readonly IAuthorService _authorService;
+        private readonly ICategoryService _categoryService;
 
         public UserService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
         {
@@ -22,6 +23,7 @@ namespace LibraryApi.Services.Implementations
             _serviceFactory = serviceFactory;
             _bookService = serviceFactory.GetService<BookService>();
             _authorService = serviceFactory.GetService<AuthorService>();
+            _categoryService = serviceFactory.GetService<CategoryService>();
         }
 
         public async Task<Author> CreateAuthorAsync(Author author)
@@ -34,9 +36,9 @@ namespace LibraryApi.Services.Implementations
             return await _bookService.CreateBookAsync(book);
         }
 
-        public Task<Category> CreateCategoryAsync(Category category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            return await _categoryService.CreateCategoryAsync(category);
         }
 
         public void DeleteAuthor(Author author)
@@ -51,7 +53,7 @@ namespace LibraryApi.Services.Implementations
 
         public void DeleteCategory(Category category)
         {
-            throw new NotImplementedException();
+            _categoryService.DeleteCategory(category);
         }
 
         public Task<IEnumerable<Activity>> GetActivities()
@@ -74,14 +76,14 @@ namespace LibraryApi.Services.Implementations
             return await _bookService.GetBooksByCategoryAsync(category);
         }
 
-        public Task<IEnumerable<Category>> GetCategories()
+        public async Task<IEnumerable<Category>> GetCategories()
         {
-            throw new NotImplementedException();
+            return await _categoryService.GetCategoriesAsync();
         }
 
-        public Task<IEnumerable<Category>> GetCategory(Guid id)
+        public async Task<Category> GetCategory(Guid id)
         {
-            throw new NotImplementedException();
+            return await _categoryService.GetCategoryAsync(id);
         }
 
         public Task<IEnumerable<Activity>> GetUserActivities(Guid userId)
@@ -101,7 +103,7 @@ namespace LibraryApi.Services.Implementations
 
         public void UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _categoryService.UpdateCategory(category);
         }
     }
 }

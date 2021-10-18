@@ -31,7 +31,7 @@ namespace LibraryApi.Services.Interfaces
 
         Task<IEnumerable<Category>> GetCategories();
 
-        Task<IEnumerable<Category>> GetCategory(Guid id);
+        Task<Category> GetCategory(Guid id);
 
         void UpdateCategory(Category category);
 
