@@ -14,7 +14,6 @@ namespace LibraryApi.Controllers
 {
     [ApiController]
     [Route("api/account")]
-    [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IdentityContext _context;
