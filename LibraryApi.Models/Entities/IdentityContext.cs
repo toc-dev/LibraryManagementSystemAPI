@@ -38,6 +38,7 @@ namespace LibraryApi.Models.Entities
             builder.ApplyConfiguration<Category>(new CategoryConfiguration());
             builder.ApplyConfiguration<Author>(new AuthorConfiguration());
             builder.ApplyConfiguration<Book>(new BookConfiguration());
+            builder.ApplyConfiguration<User>(new UserConfiguration());
         }
 
         public DbSet<User> Users { get; set; }

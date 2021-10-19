@@ -1,4 +1,6 @@
 using LibraryApi.Extensions;
+using LibraryApi.Services.Implementations;
+using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace LibraryApi
@@ -30,6 +33,8 @@ namespace LibraryApi
             services.ConfigureIdentity();
             services.RegisterServices();
 
+            services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(Assembly.Load("LibraryApi"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -48,6 +53,8 @@ namespace LibraryApi
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
