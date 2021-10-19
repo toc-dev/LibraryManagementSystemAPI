@@ -42,13 +42,15 @@ namespace LibraryApi.Services.Implementations
 
         public void DeleteBook(Book book)
         {
-            _bookRepo.Delete(book);
+            book.IsDeleted = true;
+            _bookRepo.Update(book);
             _unitOfWork.SaveChanges();
         }
 
         public void UpdateBook(Book book)
         {
             _bookRepo.Update(book);
+            _unitOfWork.SaveChanges();
         }
     }
 }

@@ -26,7 +26,9 @@ namespace LibraryApi.Services.Implementations
 
         public void DeleteCategory(Category category)
         {
-            _categoryRepo.Delete(category);
+            category.IsDeleted = true;
+            _categoryRepo.Update(category);
+            _unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
@@ -42,6 +44,7 @@ namespace LibraryApi.Services.Implementations
         public void UpdateCategory(Category category)
         {
             _categoryRepo.Update(category);
+            _unitOfWork.SaveChanges();
         }
     }
 }
