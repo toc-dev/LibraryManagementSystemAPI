@@ -13,45 +13,55 @@ using System.Threading.Tasks;
 namespace LibraryApi.Controllers
 {
     [Route("api/account")]
+    [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IMapper _mapper;
+        private readonly IdentityContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly IRegisterLoginService _userService;
-        public AccountController(IMapper mapper, UserManager<User> userManager,
-            IRegisterLoginService userService)
+        private readonly SignInManager<User> _signInManager;
+        private readonly IMapper _mapper;
+
+        //private readonly IRegisterLoginService _userService;
+        public AccountController(IdentityContext context,
+            IMapper mapper,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager
+            )
         {
+            _context = context;
             _mapper = mapper;
             _userManager = userManager;
-            _userService = userService;
-
+            _signInManager = signInManager;
         }
+
         [HttpGet]
-        [Route("GetAllUsers")]
+        [Route("Users")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
             return Ok(users);
         }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
         {
-            //var users = _userService.Add(userForRegistration);
-            //var user = _mapper.Map<User>(users);
-            //var result = await _userManager.CreateAsync(user, userForRegistration.Password);
-            /**
-            var user = new UserForRegistrationDTO
+            if (userForRegistration == null)
+                return BadRequest("Empty Registration Details");
+
+            var user = new User
             {
-                UserName = userForRegistration.UserName,
+                FirstName = userForRegistration.FirstName,
+                LastName = userForRegistration.LastName,
                 Email = userForRegistration.Email,
-                Password = userForRegistration.Password,
+                PhoneNumber = userForRegistration.PhoneNumber,
+                UserName = userForRegistration.UserName,
+                DateOfBirth = userForRegistration.DateOfBirth,
+                Gender = userForRegistration.Gender
             };
-            **/
-            //await Task.FromResult(_userService.Add(user));
-            
-            var user = _mapper.Map<User>(userForRegistration);
+
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -60,10 +70,8 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            //await _userManager.CreateAsync(user, userForRegistration.Password);
-            
-            //await _userManager.CreateAsync(user, userForRegistration.Password);
-            return Ok(result);
+
+            return Ok(new { Message = "Registration Successful" });
 
         }
     }

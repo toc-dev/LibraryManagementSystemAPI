@@ -38,7 +38,7 @@ namespace LibraryApi.Services.Implementations
                 UserName = registerUser.UserName,
                 //DateOfBirth = registerUser.DateOfBirth,
                 //Gender = registerUser.Gender,
-                Password = registerUser.Password
+                //Password = registerUser.Password
             };
             _userRepository.Add(user);
             affectedRows = _unitOfWork.SaveChanges();

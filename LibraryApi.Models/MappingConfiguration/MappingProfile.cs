@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryApi.Models.AutoMapper
+namespace LibraryApi.Models.MappingConfiguration
 {
     public class MappingProfile:Profile
     {
         public MappingProfile()
         {
-            CreateMap<UserForRegistrationDTO, User>();
+            CreateMap<UserForRegistrationDTO, User>()
                 //.ForMember(dest =>
                 //dest.FirstName,
                 //opt => opt.MapFrom(src => src.FirstName))
@@ -23,6 +23,7 @@ namespace LibraryApi.Models.AutoMapper
                 //opt => opt.MapFrom(src => src.FirstName))
                 //.ForMember(dest => dest.Password,
                 //opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender));
 
             CreateMap<User, UserForRegistrationDTO>();
         }

@@ -17,11 +17,7 @@ namespace LibraryApi.Models.Dtos
         [Required(ErrorMessage ="Password is required")]
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
-        //public DateTime DateOfBirth { get; set; } = DateTime.Now;
-        //public Gender Gender { get; set; } = Gender.Male;
-        //public DateTime CreatedAt { get; set; } = DateTime.Now;
-        //public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        //public string CreatedBy { get; set; } = "Tochukwu";
-        //public string UpdatedBy { get; set; } = "Tochukwu";
+        public DateTime DateOfBirth { get; set; }
+        public Gender Gender { get; set; }
     }
 }

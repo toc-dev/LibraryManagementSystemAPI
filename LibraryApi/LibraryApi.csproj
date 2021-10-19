@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibraryApi.Models\LibraryApi.Models.csproj" />
+    <ProjectReference Include="..\LibraryApi.Services\LibraryApi.Services.csproj" />
   </ItemGroup>
 
 </Project>

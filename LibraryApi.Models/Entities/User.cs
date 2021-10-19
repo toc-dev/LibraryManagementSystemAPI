@@ -14,7 +14,6 @@ namespace LibraryApi.Models.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Password { get; set; }
         public Gender Gender { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
