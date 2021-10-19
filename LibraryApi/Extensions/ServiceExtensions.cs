@@ -42,10 +42,18 @@ namespace LibraryApi.Extensions
             services.AddTransient<DbContext, IdentityContext>();
             services.AddTransient<IUnitOfWork<IdentityContext>, UnitOfWork<IdentityContext>>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
-            services.AddTransient<IBookService, BookService>();
-            services.AddTransient<IAuthorService, AuthorService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ICategoryService, CategoryService>();
+
+            /* Caution: 
+            *   Having issues with add-migration and update-databse
+            *   whenever I add these services.
+            *   I don't have an idea yet,
+            *   Maybe cos we already using the servicefactory when to get other services.
+            *   So that why I commented it out for now.
+            */
+            //services.AddTransient<IBookService, BookService>();
+            //services.AddTransient<IAuthorService, AuthorService>();
+            //services.AddTransient<IUserService, UserService>();
+            //services.AddTransient<ICategoryService, CategoryService>();
             return services;
         }
     }
