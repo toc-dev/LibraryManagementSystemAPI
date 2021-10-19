@@ -53,6 +53,9 @@ namespace LibraryApi.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<DbContext, IdentityContext>();
+            services.AddTransient<IRepository<User>, Repository<User>>();
+            services.AddTransient<IRegisterLoginService, RegisterLoginService>();
+            services.AddTransient<IUnitOfWork<IdentityContext>, UnitOfWork<IdentityContext>>();
             return services;
         }
     }

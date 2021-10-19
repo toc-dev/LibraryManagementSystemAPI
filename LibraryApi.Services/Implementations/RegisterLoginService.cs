@@ -13,9 +13,9 @@ namespace LibraryApi.Services.Implementations
 {
     public class RegisterLoginService : IRegisterLoginService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<IdentityContext> _unitOfWork;
         private readonly IRepository<User> _userRepository;
-        public RegisterLoginService(IUnitOfWork unitOfWork, IRepository<User> userRepository)
+        public RegisterLoginService(IUnitOfWork<IdentityContext> unitOfWork, IRepository<User> userRepository)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
 {
+    [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
@@ -33,23 +34,9 @@ namespace LibraryApi.Controllers
             var users = await _userManager.Users.ToListAsync();
             return Ok(users);
         }
-        [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
-        {
-            //var users = _userService.Add(userForRegistration);
-            //var user = _mapper.Map<User>(users);
-            //var result = await _userManager.CreateAsync(user, userForRegistration.Password);
-            /**
-            var user = new UserForRegistrationDTO
-            {
-                UserName = userForRegistration.UserName,
-                Email = userForRegistration.Email,
-                Password = userForRegistration.Password,
-            };
-            **/
-            //await Task.FromResult(_userService.Add(user));
-            
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
+        {         
             var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (!result.Succeeded)
@@ -63,7 +50,7 @@ namespace LibraryApi.Controllers
             //await _userManager.CreateAsync(user, userForRegistration.Password);
             
             //await _userManager.CreateAsync(user, userForRegistration.Password);
-            return Ok(result);
+            return Ok(user);
 
         }
     }

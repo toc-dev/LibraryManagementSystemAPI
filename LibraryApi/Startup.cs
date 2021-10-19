@@ -33,7 +33,7 @@ namespace LibraryApi
             services.ConfigureIdentity();
             services.RegisterServices();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
             //services.AddAutoMapper(Assembly.Load("LibraryApi"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
