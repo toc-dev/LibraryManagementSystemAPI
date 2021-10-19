@@ -58,7 +58,6 @@ namespace LibraryApi.Controllers
             }
             //await _userManager.CreateAsync(user, userForRegistration.Password);
             
-            //await _userManager.CreateAsync(user, userForRegistration.Password);
             return Ok(user);
 
         }
