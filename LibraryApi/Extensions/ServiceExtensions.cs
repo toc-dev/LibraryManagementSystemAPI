@@ -2,15 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using LibraryApi.Models.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using LibraryApi.Services.Implementations;
-using LibraryApi.Services.Interfaces;
-using LibraryApi.Data.Implementations;
 using LibraryApi.Data.Interfaces;
+using LibraryApi.Data.Implementations;
+using LibraryApi.Services.Interfaces;
+using LibraryApi.Services.Implementations;
 
 namespace LibraryApi.Extensions
 {
@@ -56,10 +53,6 @@ namespace LibraryApi.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddTransient<DbContext, IdentityContext>();
-            services.AddScoped<IUnitOfWork, UnitOfWork<IdentityContext>>();
-            services.AddScoped<IRepository<User>, Repository<User>>();
-            services.AddScoped<IRegisterLoginService, RegisterLoginService>();
-            services.AddHttpContextAccessor();
             return services;
         }
     }

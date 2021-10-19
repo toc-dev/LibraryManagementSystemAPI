@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Models.Entities
 {
-    public class Category : ITracking
+    public class Category : ITracking, ISoftDelete
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -15,5 +15,6 @@ namespace LibraryApi.Models.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

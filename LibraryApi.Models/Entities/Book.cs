@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Models.Entities
 {
-    public class Book : ITracking
+    public class Book : ITracking, ISoftDelete
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -23,5 +23,6 @@ namespace LibraryApi.Models.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

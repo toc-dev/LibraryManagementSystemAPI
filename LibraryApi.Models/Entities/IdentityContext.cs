@@ -35,14 +35,17 @@ namespace LibraryApi.Models.Entities
 
             builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable(name: "UserTokens"));
 
+            builder.Entity<Author>().HasQueryFilter(a => !a.IsDeleted);
+            builder.Entity<Book>().HasQueryFilter(b => !b.IsDeleted);
+            builder.Entity<Category>().HasQueryFilter(c => !c.IsDeleted);
+            builder.Entity<Activity>().HasQueryFilter(a => !a.Book.IsDeleted);
+
             builder.ApplyConfiguration<Category>(new CategoryConfiguration());
             builder.ApplyConfiguration<Author>(new AuthorConfiguration());
             builder.ApplyConfiguration<Book>(new BookConfiguration());
             builder.ApplyConfiguration<User>(new UserConfiguration());
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
