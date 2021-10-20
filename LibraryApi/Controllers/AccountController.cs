@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
 {
-    [Route("api/account")]
     [ApiController]
+    [Route("api/account")]
     public class AccountController : ControllerBase
     {
         private readonly IdentityContext _context;
@@ -41,25 +41,10 @@ namespace LibraryApi.Controllers
             var users = await _userManager.Users.ToListAsync();
             return Ok(users);
         }
-
-        [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
-        {
-            if (userForRegistration == null)
-                return BadRequest("Empty Registration Details");
-
-            var user = new User
-            {
-                FirstName = userForRegistration.FirstName,
-                LastName = userForRegistration.LastName,
-                Email = userForRegistration.Email,
-                PhoneNumber = userForRegistration.PhoneNumber,
-                UserName = userForRegistration.UserName,
-                DateOfBirth = userForRegistration.DateOfBirth,
-                Gender = userForRegistration.Gender
-            };
-
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
+        {         
+            var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (!result.Succeeded)
@@ -70,8 +55,9 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
-
-            return Ok(new { Message = "Registration Successful" });
+            //await _userManager.CreateAsync(user, userForRegistration.Password);
+            
+            return Ok(user);
 
         }
     }
