@@ -31,6 +31,7 @@ namespace LibraryApi
         {
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
             services.RegisterServices();
 
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));

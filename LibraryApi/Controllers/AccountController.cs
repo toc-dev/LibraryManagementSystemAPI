@@ -2,6 +2,7 @@
 using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("Users")]
+        [Route("Users"), Authorize]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -45,6 +46,7 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
         {         
             var user = _mapper.Map<User>(userForRegistration);
+            // check if user exists
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (!result.Succeeded)
