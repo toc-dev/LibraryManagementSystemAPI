@@ -33,6 +33,10 @@ namespace LibraryApi.Extensions
             {
                 options.User.RequireUniqueEmail = true;
             });
+
+            // Sage please explain this line of code in your next push
+            // Cos I feel this line down can be added to the services.Configure<IdentityOPtions>() above
+            // Look at it, it's more like a repetition.
             var builder = services.AddIdentityCore<User>(u =>
             {
                 u.Password.RequireDigit = true;
@@ -52,7 +56,13 @@ namespace LibraryApi.Extensions
 
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
-            services.AddTransient<DbContext, IdentityContext>();
+            services.AddTransient<IUnitOfWork, UnitOfWork<IdentityContext>>();
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IServiceFactory, ServiceFactory>();
+            
             return services;
         }
     }
