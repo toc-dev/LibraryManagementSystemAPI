@@ -16,6 +16,7 @@ namespace LibraryApi.Services.Implementations
         private readonly IBookService _bookService;
         private readonly IAuthorService _authorService;
         private readonly ICategoryService _categoryService;
+        private readonly IActivityService _activityService;
 
         public UserService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
         {
@@ -24,6 +25,7 @@ namespace LibraryApi.Services.Implementations
             _bookService = serviceFactory.GetService<BookService>();
             _authorService = serviceFactory.GetService<AuthorService>();
             _categoryService = serviceFactory.GetService<CategoryService>();
+            _activityService = serviceFactory.GetService<ActivityService>();
         }
 
         public async Task<Author> CreateAuthorAsync(Author author)
@@ -56,9 +58,9 @@ namespace LibraryApi.Services.Implementations
             _categoryService.DeleteCategory(category);
         }
 
-        public Task<IEnumerable<Activity>> GetActivities()
+        public async Task<IEnumerable<Activity>> GetActivitiesAsync()
         {
-            throw new NotImplementedException();
+            return await _activityService.GetActivities();
         }
 
         public async Task<Book> GetBookByIdAsync(Guid id)
@@ -76,19 +78,19 @@ namespace LibraryApi.Services.Implementations
             return await _bookService.GetBooksByCategoryAsync(category);
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
             return await _categoryService.GetCategoriesAsync();
         }
 
-        public async Task<Category> GetCategory(Guid id)
+        public async Task<Category> GetCategoryAsync(Guid id)
         {
             return await _categoryService.GetCategoryAsync(id);
         }
 
-        public Task<IEnumerable<Activity>> GetUserActivities(Guid userId)
+        public async Task<IEnumerable<Activity>> GetUserActivitiesAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _activityService.GetUserActivities(userId);
         }
 
         public void UpdateAuthorAsync(Author author)
