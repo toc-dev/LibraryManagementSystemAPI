@@ -29,17 +29,17 @@ namespace LibraryApi.Services.Interfaces
 
         Task<Category> CreateCategoryAsync(Category category);
 
-        Task<IEnumerable<Category>> GetCategories();
+        Task<IEnumerable<Category>> GetCategoriesAsync();
 
-        Task<Category> GetCategory(Guid id);
+        Task<Category> GetCategoryAsync(Guid id);
 
         void UpdateCategory(Category category);
 
         void DeleteCategory(Category category);
 
-        Task<IEnumerable<Activity>> GetActivities();
+        Task<IEnumerable<Activity>> GetActivitiesAsync();
 
-        Task<IEnumerable<Activity>> GetUserActivities(Guid userId);
+        Task<IEnumerable<Activity>> GetUserActivitiesAsync(Guid userId);
 
     }
 }
