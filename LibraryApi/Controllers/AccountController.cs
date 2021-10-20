@@ -46,6 +46,7 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
         {         
             var user = _mapper.Map<User>(userForRegistration);
+            // check if user exists
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (!result.Succeeded)
