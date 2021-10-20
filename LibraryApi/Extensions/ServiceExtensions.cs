@@ -32,12 +32,17 @@ namespace LibraryApi.Extensions
             services.Configure<IdentityOptions>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 10;
+                options.User.RequireUniqueEmail = true;
             });
 
             // Sage please explain this line of code in your next push
             // Cos I feel this line down can be added to the services.Configure<IdentityOPtions>() above
             // Look at it, it's more like a repetition.
-            var builder = services.AddIdentityCore<User>(u =>
+            /*var builder = services.AddIdentityCore<User>(u =>
             {
                 u.Password.RequireDigit = true;
                 u.Password.RequireLowercase = true;
@@ -49,7 +54,7 @@ namespace LibraryApi.Extensions
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole),
                 builder.Services);
             builder.AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();*/
 
             return services;
         }
