@@ -24,6 +24,7 @@ namespace LibraryApi.Models.Configurations
                     Email = "harrywills@domain.com",
                     Gender = Gender.Male,
                     DateOfBirth = new DateTime(1992, 11, 11),
+                    CreatedBy = "Gideon",
                 },
 
                 new Author
@@ -34,6 +35,7 @@ namespace LibraryApi.Models.Configurations
                     Email = "terrygraham@domain.com",
                     Gender = Gender.Male,
                     DateOfBirth = new DateTime(1995, 3, 1),
+                    CreatedBy = "Gideon"
                 }
             );
         }

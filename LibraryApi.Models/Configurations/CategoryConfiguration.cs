@@ -17,25 +17,29 @@ namespace LibraryApi.Models.Configurations
                 new Category
                 {
                     Id = new Guid("8bde71e7-b24a-42cd-ad44-08d98a13616c"),
-                    Name = "Motivation"
+                    Name = "Motivation",
+                    CreatedBy = "Gideon"
                 },
 
                 new Category
                 {
                     Id = new Guid("44935b91-3283-4f39-f08d-08d98a1078df"),
-                    Name = "Non-fiction"
+                    Name = "Non-fiction",
+                    CreatedBy = "Gideon"
                 },
-                
+
                 new Category
                 {
                     Id = new Guid("dff0527f-8f24-4402-215f-08d98a13c3e8"),
-                    Name = "Career"
+                    Name = "Career",
+                    CreatedBy = "Gideon"
                 },
 
                 new Category
                 {
                     Id = new Guid("6007d5fa-3a6e-436d-8854-08d98a27ad68"),
-                    Name = "Sales"
+                    Name = "Sales",
+                    CreatedBy = "Gideon"
                 });
         }
     }
