@@ -48,7 +48,7 @@ namespace LibraryApi.Controllers
             return Ok(users);
         }
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
+        public async Task<IActionResult> RegisterUser([FromBody]UserForRegistrationDTO userForRegistration)
         {         
             var user = _mapper.Map<User>(userForRegistration);
             // check if user exists
