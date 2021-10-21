@@ -11,6 +11,7 @@ using LibraryApi.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LibraryApi.ActionFilters;
 
 namespace LibraryApi.Extensions
 {
@@ -70,6 +71,8 @@ namespace LibraryApi.Extensions
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+            services.AddScoped<ValidationFilterAttribute>();
             
             return services;
         }

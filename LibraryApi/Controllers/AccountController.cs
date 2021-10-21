@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using LibraryApi.ActionFilters;
+using LibraryApi.Data.Implementations;
+using LibraryApi.Data.Interfaces;
 using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
@@ -21,22 +24,24 @@ namespace LibraryApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
-
+        private readonly IAuthenticationManager _authenticationManager;
         //private readonly IRegisterLoginService _userService;
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            SignInManager<User> signInManager
+            SignInManager<User> signInManager,
+            IAuthenticationManager authenticationManager
             )
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
+            _authenticationManager = authenticationManager;
         }
 
         [HttpGet]
-        [Route("Users"), Authorize]
+        [Route("users"), Authorize]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -61,6 +66,16 @@ namespace LibraryApi.Controllers
             
             return Ok(user);
 
+        }
+        [HttpPost("login")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO user)
+        {
+            if (!await _authenticationManager.ValidateUser(user))
+            {
+                return Unauthorized();
+            }
+            return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
     }
 }
