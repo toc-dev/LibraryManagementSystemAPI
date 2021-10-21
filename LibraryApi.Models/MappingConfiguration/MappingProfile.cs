@@ -17,6 +17,10 @@ namespace LibraryApi.Models.MappingConfiguration
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender));
 
             CreateMap<User, UserForRegistrationDTO>();
+            CreateMap<Author, ViewAuthorDto>()
+                .ForMember(c => c.FullName, opt => opt.MapFrom(x => string.Join(' ', x.FirstName, x.LastName)));
+            CreateMap<AuthorForCreationDto, Author>();
+                
         }
     }
 }

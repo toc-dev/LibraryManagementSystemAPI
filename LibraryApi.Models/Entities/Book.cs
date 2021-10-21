@@ -18,7 +18,7 @@ namespace LibraryApi.Models.Entities
         [ForeignKey(nameof(Author))]
         public Guid AuthorId { get; set; }
         public Author Author { get; set; }
-        public ICollection<string> Categories { get; set; }
+        public string Category { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }

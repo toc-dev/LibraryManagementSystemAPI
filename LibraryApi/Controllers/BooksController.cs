@@ -24,5 +24,17 @@ namespace LibraryApi.Controllers
         {
             return Ok(await _bookService.GetBooksAsync());
         }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> GetBook(Guid id)
+        {
+            return Ok(await _bookService.GetBookByIdAsync(id));
+        }
+
+        [HttpGet("category/{category}")]
+        public async Task<IActionResult> GetBooksByCategory(string category)
+        {
+            return Ok(await _bookService.GetBooksByCategoryAsync(category));
+        }
     }
 }

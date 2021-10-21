@@ -63,6 +63,8 @@ namespace LibraryApi
             {
                 endpoints.MapControllers();
             });
+
+            Seeding.SeedUser(app);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace LibraryApi.Services.Implementations
 
         public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(string category)
         {
-            return await Task.FromResult(_bookRepo.GetByCondition(b => b.Categories.Contains(category)));
+            return await Task.FromResult(_bookRepo.GetByCondition(b => b.Category.Contains(category)));
         }
 
         public async Task<Book> CreateBookAsync(Book book)
