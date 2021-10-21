@@ -15,8 +15,8 @@ namespace LibraryApi.Models.Dtos
         public string ISBN { get; set; }
         [Required(ErrorMessage = "When was this book published?")]
         public DateTime YearPublished { get; set; }
-        //[Required(ErrorMessage = "AuthorId is mandatory!")]
-        //public Guid AuthorId { get; set; }
+        [Required(ErrorMessage = "AuthorId is mandatory!")]
+        public Guid AuthorId { get; set; }
         [Required(ErrorMessage = "Specify categories!")]
         public ICollection<string> Categories { get; set; }
         [Required(ErrorMessage = "Who's adding this book?")]
