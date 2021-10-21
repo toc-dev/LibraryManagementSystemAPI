@@ -1,4 +1,5 @@
 ﻿using LibraryApi.Data.Interfaces;
+using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using System;
@@ -63,17 +64,17 @@ namespace LibraryApi.Services.Implementations
             return await _activityService.GetActivities();
         }
 
-        public async Task<Book> GetBookByIdAsync(Guid id)
+        public async Task<ViewBookDto> GetBookByIdAsync(Guid id)
         {
             return await _bookService.GetBookByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<ViewBookDto>> GetBooksAsync()
         {
             return await _bookService.GetBooksAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(string category)
+        public async Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category)
         {
             return await _bookService.GetBooksByCategoryAsync(category);
         }

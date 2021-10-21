@@ -1,15 +1,14 @@
 ﻿using LibraryApi.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -25,7 +24,7 @@ namespace LibraryApi.Controllers
             return Ok(await _bookService.GetBooksAsync());
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(Guid id)
         {
             return Ok(await _bookService.GetBookByIdAsync(id));

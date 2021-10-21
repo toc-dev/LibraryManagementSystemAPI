@@ -22,21 +22,18 @@ namespace LibraryApi.Controllers
     {
         private readonly IdentityContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
         private readonly IAuthenticationManager _authenticationManager;
-        //private readonly IRegisterLoginService _userService;
+        
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
             IAuthenticationManager authenticationManager
             )
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
-            _signInManager = signInManager;
             _authenticationManager = authenticationManager;
         }
 
@@ -47,11 +44,11 @@ namespace LibraryApi.Controllers
             var users = await _userManager.Users.ToListAsync();
             return Ok(users);
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
         {         
             var user = _mapper.Map<User>(userForRegistration);
-            // check if user exists
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (!result.Succeeded)
@@ -62,11 +59,10 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            //await _userManager.CreateAsync(user, userForRegistration.Password);
             
             return Ok(user);
-
         }
+
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO user)

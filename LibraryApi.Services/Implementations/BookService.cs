@@ -1,4 +1,6 @@
-﻿using LibraryApi.Data.Interfaces;
+﻿using AutoMapper;
+using LibraryApi.Data.Interfaces;
+using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using System;
@@ -13,26 +15,38 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Book> _bookRepo;
+        private readonly IMapper _mapper;
 
-        public BookService(IUnitOfWork unitOfWork)
+        public BookService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _bookRepo = unitOfWork.GetRepository<Book>();
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<ViewBookDto>> GetBooksAsync()
         {
-            return await _bookRepo.GetAllAsync();
+            var books = await _bookRepo.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
-        public async Task<Book> GetBookByIdAsync(Guid id)
+        public async Task<ViewBookDto> GetBookByIdAsync(Guid id)
         {
-            return await _bookRepo.GetByIdAsync(id);
+            var book = await _bookRepo.GetByIdAsync(id);
+
+            if (book is null) return null;
+
+            return _mapper.Map<ViewBookDto>(book);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(string category)
+        public async Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category)
         {
-            return await Task.FromResult(_bookRepo.GetByCondition(b => b.Category.Contains(category)));
+            var books = await Task.FromResult(_bookRepo.GetByCondition(b => b.Category.Contains(category)));
+
+            if (books is null) return null;
+
+            return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
         public async Task<Book> CreateBookAsync(Book book)
