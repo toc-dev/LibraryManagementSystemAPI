@@ -1,4 +1,5 @@
-﻿using LibraryApi.Models.Entities;
+﻿using LibraryApi.Models.Dtos;
+using LibraryApi.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<Book>> GetBooksAsync();
+        Task<IEnumerable<ViewBookDto>> GetBooksAsync();
 
-        Task<Book> GetBookByIdAsync(Guid id);
+        Task<ViewBookDto> GetBookByIdAsync(Guid id);
 
-        Task<IEnumerable<Book>> GetBooksByCategoryAsync(string category);
+        Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
 
         Task<Book> CreateBookAsync(Book book);
 

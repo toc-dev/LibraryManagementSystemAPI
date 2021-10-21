@@ -16,11 +16,11 @@ namespace LibraryApi
     {
         private static RoleManager<Role> _roleManager;
         private static UserManager<User> _userManager;
-        private const string User1 = "Gideon";
+        private const string User1 = "g.akunana";
         private const string User1Password = "Gideon@12345678";
-        private const string User2 = "Sage";
+        private const string User2 = "t.sage";
         private const string User2Password = "Sage@12345678";
-        private const string User3 = "Michael";
+        private const string User3 = "k.michael";
         private const string User3Password = "Michael@12345678";
 
         public static async void SeedUser(IApplicationBuilder app)

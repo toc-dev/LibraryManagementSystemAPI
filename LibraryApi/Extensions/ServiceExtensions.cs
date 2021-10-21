@@ -44,23 +44,6 @@ namespace LibraryApi.Extensions
                 options.User.RequireUniqueEmail = true;
             });
 
-            // Sage please explain this line of code in your next push
-            // Cos I feel this line down can be added to the services.Configure<IdentityOPtions>() above
-            // Look at it, it's more like a repetition.
-            /*var builder = services.AddIdentityCore<User>(u =>
-            {
-                u.Password.RequireDigit = true;
-                u.Password.RequireLowercase = true;
-                u.Password.RequireUppercase = true;
-                u.Password.RequireNonAlphanumeric = true;
-                u.Password.RequiredLength = 10;
-                u.User.RequireUniqueEmail = true;
-            });
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole),
-                builder.Services);
-            builder.AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();*/
-
             return services;
         }
 
@@ -87,14 +70,14 @@ namespace LibraryApi.Extensions
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
 
                         ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
                         ValidAudience = jwtSettings.GetSection("validAudience").Value,
@@ -102,26 +85,6 @@ namespace LibraryApi.Extensions
                         SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
                 });
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("UserPolicy",
-            //        policy => policy.RequireClaim("User")
-            //                        .RequireClaim("Author"));
-            //});
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("AuthorPolicy",
-            //        policy => policy.RequireClaim("Author")
-            //                        .RequireClaim("User"));
-            //});
-            
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("AdminPolicy",
-            //        policy => policy.RequireClaim("Admin")
-            //                        .RequireClaim("User"));
-            //});
         }
     }
 }

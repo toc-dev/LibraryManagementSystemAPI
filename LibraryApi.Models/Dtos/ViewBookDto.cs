@@ -8,8 +8,10 @@ namespace LibraryApi.Models.Dtos
 {
     public class ViewBookDto
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
+        public int YearPublished { get; set; }
+        public string ISBN { get; set; }
         public Guid AuthorId { get; set; }
-        public DateTime YearPublished { get; set; }
     }
 }
