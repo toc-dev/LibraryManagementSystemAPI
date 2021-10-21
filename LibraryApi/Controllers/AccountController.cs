@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
@@ -41,7 +42,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("users"), Authorize]
+        [Route("users"), Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -54,6 +55,7 @@ namespace LibraryApi.Controllers
             // check if user exists
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -62,7 +64,8 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            //await _userManager.CreateAsync(user, userForRegistration.Password);
+            var claim = new Claim("UserType", userForRegistration.UserType);
+            await _userManager.AddClaimAsync(user, claim);
             
             return Ok(user);
 

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LibraryApi.ActionFilters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApi.Extensions
 {
@@ -101,6 +102,26 @@ namespace LibraryApi.Extensions
                         SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
                 });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("UserPolicy",
+            //        policy => policy.RequireClaim("User")
+            //                        .RequireClaim("Author"));
+            //});
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("AuthorPolicy",
+            //        policy => policy.RequireClaim("Author")
+            //                        .RequireClaim("User"));
+            //});
+            
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("AdminPolicy",
+            //        policy => policy.RequireClaim("Admin")
+            //                        .RequireClaim("User"));
+            //});
         }
     }
 }
