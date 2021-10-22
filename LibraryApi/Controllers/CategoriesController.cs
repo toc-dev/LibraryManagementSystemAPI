@@ -1,18 +1,17 @@
 ﻿using LibraryApi.Models.Dtos;
 using LibraryApi.Services.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using LibraryApi.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "RequireAdminRole")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -36,7 +35,7 @@ namespace LibraryApi.Controllers
             return Ok(await _categoryService.GetCategoriesAsync());
         }
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryForCreationDto newCategory)
         {
             if (newCategory is null) return BadRequest();

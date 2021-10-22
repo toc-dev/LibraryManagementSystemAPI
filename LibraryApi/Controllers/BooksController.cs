@@ -8,7 +8,7 @@ namespace LibraryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "RequireAnyRole")]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;

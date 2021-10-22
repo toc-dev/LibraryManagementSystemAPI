@@ -90,14 +90,20 @@ namespace LibraryApi.Extensions
         public static void AddClaimsAuthorization(this IServiceCollection services)
         {
             services.AddAuthorization(options => {
-                options.AddPolicy("AdminClaimPolicy",
+                options.AddPolicy("RequireAdminRole",
                     policy => policy.RequireRole(AppRole.Admin.ToString()));
 
-                options.AddPolicy("AuthorClaimPolicy",
+                options.AddPolicy("RequireAuthorRole",
                     policy => policy.RequireRole(AppRole.Author.ToString()));
                 
-                options.AddPolicy("UserClaimPolicy",
-                    policy => policy.RequireRole(AppRole.User.ToString()));
+                options.AddPolicy("RequireUserOrAdminRole",
+                    policy => policy.RequireRole(AppRole.User.ToString(), AppRole.Admin.ToString()));
+
+                options.AddPolicy("RequireAuthorOrAdminRole",
+                    policy => policy.RequireRole(AppRole.Author.ToString(), AppRole.Admin.ToString()));
+
+                options.AddPolicy("RequireAnyRole",
+                    policy => policy.RequireRole(AppRole.Admin.ToString(), AppRole.Author.ToString(), AppRole.User.ToString()));
             });
         }
     }
