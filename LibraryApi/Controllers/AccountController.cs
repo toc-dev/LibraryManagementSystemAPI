@@ -39,7 +39,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("users"), Authorize(Policy = "UserPolicy")]
+        [Route("users"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -61,8 +61,11 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
+            await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+
+            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
             var claim = new Claim("UserType", userForRegistration.UserType);
-            await _userManager.AddClaimAsync(user, claim);
+            await _userManager.AddClaimAsync(userFromDb, claim);
             
             return Ok(user);
         }
