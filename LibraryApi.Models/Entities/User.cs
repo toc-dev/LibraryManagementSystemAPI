@@ -19,6 +19,5 @@ namespace LibraryApi.Models.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public string UserType { get; set; }
     }
 }

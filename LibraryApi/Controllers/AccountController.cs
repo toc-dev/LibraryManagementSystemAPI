@@ -63,9 +63,9 @@ namespace LibraryApi.Controllers
             }
             await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
 
-            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
-            var claim = new Claim("UserType", userForRegistration.UserType);
-            await _userManager.AddClaimAsync(userFromDb, claim);
+            //var userFromDb = await _userManager.FindByNameAsync(user.UserName);
+            //var claim = new Claim("UserType", userForRegistration.UserType);
+            //await _userManager.AddClaimAsync(userFromDb, claim);
             
             return Ok(user);
         }

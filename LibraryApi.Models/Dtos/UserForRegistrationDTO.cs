@@ -22,6 +22,5 @@ namespace LibraryApi.Models.Dtos
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
         public ICollection<string> Roles { get; set; }
-        public string UserType { get; set; }
     }
 }
