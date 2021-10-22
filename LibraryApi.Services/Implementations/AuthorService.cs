@@ -29,7 +29,7 @@ namespace LibraryApi.Services.Implementations
             _authorRepo.Delete(author);
         }
 
-        public async Task<Author> GetAuthorByIdAsync(Guid authorId)
+        public async Task<Author> GetAuthorByIdAsync(Guid authorId, bool trackChanges)
         {
             return await _authorRepo.GetByIdAsync(authorId);
         }

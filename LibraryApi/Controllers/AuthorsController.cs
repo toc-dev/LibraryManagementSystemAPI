@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using LibraryApi.Data.Interfaces;
 using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,15 +20,21 @@ namespace LibraryApi.Controllers
         private readonly IAuthorService authorService;
         private readonly IMapper mapper;
         private readonly IBookService bookService;
+        private readonly IUnitOfWork unitOfWork;
 
-        public AuthorsController(IAuthorService authorService, IMapper mapper, IBookService bookService)
+        public AuthorsController(IAuthorService authorService, 
+            IMapper mapper, 
+            IBookService bookService,
+            IUnitOfWork unitOfWork)
         {
             this.authorService = authorService;
             this.mapper = mapper;
             this.bookService = bookService;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAuthors()
         {
             var authors = await authorService.GetAuthorsAsync();
@@ -38,7 +46,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetAuthor")]
         public async Task<IActionResult> GetSingleAuthor(Guid id)
         {
-            var author = await authorService.GetAuthorByIdAsync(id);
+            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
 
             var authorDto = mapper.Map<ViewAuthorDto>(author);
             return Ok(authorDto);
@@ -66,7 +74,29 @@ namespace LibraryApi.Controllers
             var bookToReturn = mapper.Map<ViewBookDto>(bookAdded);
 
             return CreatedAtRoute("GetAuthor", new { id = bookToReturn.AuthorId }, bookToReturn);
+        }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody]AuthorForUpdateDto authorForUpdateDto)
+        {
+            if (authorForUpdateDto == null) return BadRequest("authorDto is null!");
+
+            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: true);
+            
+            mapper.Map(authorForUpdateDto, author);
+            unitOfWork.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAuthor(Guid id)
+        {
+            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
+            authorService.DeleteAuthor(author);
+            unitOfWork.SaveChanges();
+
+            return NoContent();
         }
     }
 }
