@@ -31,5 +31,10 @@ namespace LibraryApi.Services.Implementations
         {
             return await Task.FromResult(_activityRepo.GetByCondition(b => b.UserId == id));
         }
+
+        public async Task<Activity> CreateActivity(Activity activity)
+        {
+            return await _activityRepo.AddAsync(activity);
+        }
     }
 }
