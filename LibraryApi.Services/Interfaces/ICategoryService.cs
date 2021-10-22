@@ -1,4 +1,5 @@
-﻿using LibraryApi.Models.Entities;
+﻿using LibraryApi.Models.Dtos;
+using LibraryApi.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,14 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<Category> CreateCategoryAsync(Category category);
+        Task<ViewCategoryDto> CreateCategoryAsync(Category category);
 
-        Task<IEnumerable<Category>> GetCategoriesAsync();
+        Task<IEnumerable<ViewCategoryDto>> GetCategoriesAsync();
 
-        Task<Category> GetCategoryAsync(Guid id);
+        Task<ViewCategoryDto> GetCategoryAsync(Guid id);
 
         void UpdateCategory(Category category);
 
-        void DeleteCategory(Category category);
+        Task DeleteCategory(Guid id);
     }
 }

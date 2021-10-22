@@ -1,4 +1,6 @@
-﻿using LibraryApi.Data.Interfaces;
+﻿using AutoMapper;
+using LibraryApi.Data.Interfaces;
+using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using System;
@@ -13,32 +15,41 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Category> _categoryRepo;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IUnitOfWork unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _categoryRepo = unitOfWork.GetRepository<Category>();
+            _mapper = mapper;
         }
-        public async Task<Category> CreateCategoryAsync(Category category)
+        public async Task<ViewCategoryDto> CreateCategoryAsync(Category category)
         {
-            return await _categoryRepo.AddAsync(category);
+            var newCategory = await _categoryRepo.AddAsync(category);
+            return _mapper.Map<ViewCategoryDto>(newCategory);
         }
+                   
+        public async Task DeleteCategory(Guid id)
+        {
+            var category = await _categoryRepo.GetByIdAsync(id);
 
-        public void DeleteCategory(Category category)
-        {
+            category.UpdatedAt = DateTime.Now;
+            category.UpdatedBy = "Admin";
             category.IsDeleted = true;
             _categoryRepo.Update(category);
             _unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        public async Task<IEnumerable<ViewCategoryDto>> GetCategoriesAsync()
         {
-            return await _categoryRepo.GetAllAsync();
+            var categories = await _categoryRepo.GetAllAsync();
+            return _mapper.Map<IEnumerable<ViewCategoryDto>>(categories);
         }
 
-        public async Task<Category> GetCategoryAsync(Guid id)
+        public async Task<ViewCategoryDto> GetCategoryAsync(Guid id)
         {
-            return await _categoryRepo.GetByIdAsync(id);
+            var category = await _categoryRepo.GetByIdAsync(id);
+            return _mapper.Map<ViewCategoryDto>(category);
         }
 
         public void UpdateCategory(Category category)

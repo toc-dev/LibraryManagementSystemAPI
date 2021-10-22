@@ -11,5 +11,6 @@ namespace LibraryApi.Services.Interfaces
     {
         Task<IEnumerable<Activity>> GetActivities();
         Task<IEnumerable<Activity>> GetUserActivities(Guid id);
+        Task<Activity> CreateActivity(Activity activity);
     }
 }

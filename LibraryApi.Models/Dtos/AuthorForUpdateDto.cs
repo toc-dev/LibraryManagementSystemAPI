@@ -1,5 +1,4 @@
-﻿using LibraryApi.Models.Enumerators;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,18 +7,13 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Models.Dtos
 {
-    public class AuthorForCreationDto
+    public class AuthorForUpdateDto
     {
         [Required(ErrorMessage = "FirstName Required!")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "LastName Required!")]
         public string LastName { get; set; }
-        [Required(ErrorMessage = "Email Required!")]
         [EmailAddress]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Gender Required!")]
-        public Gender Gender { get; set; }
-        [Required(ErrorMessage = "DateOfBirth Required!")]
-        public DateTime DateOfBirth { get; set; }
     }
 }
