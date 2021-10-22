@@ -29,8 +29,7 @@ namespace LibraryApi.Controllers
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            IAuthenticationManager authenticationManager
-            )
+            IAuthenticationManager authenticationManager)
         {
             _context = context;
             _mapper = mapper;
@@ -39,7 +38,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("users"), Authorize(Roles = "Admin")]
+        [Route("users"), Authorize(Policy = "AdminClaimPolicy")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -62,10 +61,6 @@ namespace LibraryApi.Controllers
                 return BadRequest(ModelState);
             }
             await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
-
-            //var userFromDb = await _userManager.FindByNameAsync(user.UserName);
-            //var claim = new Claim("UserType", userForRegistration.UserType);
-            //await _userManager.AddClaimAsync(userFromDb, claim);
             
             return Ok(user);
         }
