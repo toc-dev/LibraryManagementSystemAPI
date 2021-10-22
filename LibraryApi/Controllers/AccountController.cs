@@ -60,7 +60,7 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+            await _userManager.AddToRoleAsync(user, userForRegistration.Role.ToString());
             
             return Ok(user);
         }

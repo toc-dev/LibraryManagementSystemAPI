@@ -21,6 +21,6 @@ namespace LibraryApi.Models.Dtos
         public string PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-        public ICollection<string> Roles { get; set; }
+        public AppRole Role { get; set; }
     }
 }
