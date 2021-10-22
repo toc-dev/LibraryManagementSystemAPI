@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
 {
-    [Route("api/author")]
+    [Route("api/authors")]
     [ApiController]
     public class AuthorsController : ControllerBase
     {
@@ -82,7 +82,8 @@ namespace LibraryApi.Controllers
             if (authorForUpdateDto == null) return BadRequest("authorDto is null!");
 
             var author = await authorService.GetAuthorByIdAsync(id, trackChanges: true);
-            
+            if (author == null) return BadRequest("Author dosen't exist!");
+
             mapper.Map(authorForUpdateDto, author);
             unitOfWork.SaveChanges();
 
@@ -97,6 +98,30 @@ namespace LibraryApi.Controllers
             unitOfWork.SaveChanges();
 
             return NoContent();
+        }
+
+        [HttpPut("{id}/book/{id}")]
+        public async Task<IActionResult> UpdateAuthorBook(Guid userId, [FromBody]BookForUpdateDto book, Guid id)
+        {
+            var author = authorService.GetAuthorByIdAsync(userId, trackChanges: false);
+            if (author == null) return BadRequest("AuthorId is invalid!");
+
+            if (book == null) return BadRequest("Book is null");
+            var bookToUpdate = await bookService.GetBookByIdAsync(id, trackChanges: true);
+
+            mapper.Map(bookToUpdate, book);
+            unitOfWork.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpGet("{id}/books")]
+        public async Task<IActionResult> GetAuthorBooks(Guid authorId)
+        {
+            var books = await bookService.GetBooksByAuthorIdAsync(authorId);
+            if (books == null) return BadRequest("AuthorId is invalid!");
+
+            return Ok(books);
         }
     }
 }
