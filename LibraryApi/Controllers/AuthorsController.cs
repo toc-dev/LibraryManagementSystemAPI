@@ -64,7 +64,7 @@ namespace LibraryApi.Controllers
             return CreatedAtRoute("GetAuthor", new { id = authorToReturn.Id }, authorToReturn);
         }
 
-        [HttpPost("{id}/book")]
+        [HttpPost("{id}/books")]
         public async Task<IActionResult> AddAuthorBook([FromBody]BookForCreationDto bookForCreationDto)
         {
             if (bookForCreationDto == null) return BadRequest();
@@ -100,10 +100,10 @@ namespace LibraryApi.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/book/{id}")]
-        public async Task<IActionResult> UpdateAuthorBook(Guid userId, [FromBody]BookForUpdateDto book, Guid id)
+        [HttpPut("{authorId}/books/{id}")]
+        public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto book, Guid id)
         {
-            var author = authorService.GetAuthorByIdAsync(userId, trackChanges: false);
+            var author = authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
             if (book == null) return BadRequest("Book is null");
@@ -116,9 +116,9 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet("{id}/books")]
-        public async Task<IActionResult> GetAuthorBooks(Guid authorId)
+        public async Task<IActionResult> GetAuthorBooks(Guid id)
         {
-            var books = await bookService.GetBooksByAuthorIdAsync(authorId);
+            var books = await bookService.GetBooksByAuthorIdAsync(id);
             if (books == null) return BadRequest("AuthorId is invalid!");
 
             return Ok(books);
