@@ -31,7 +31,7 @@ namespace LibraryApi.Services.Implementations
             return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
-        public async Task<ViewBookDto> GetBookByIdAsync(Guid id)
+        public async Task<ViewBookDto> GetBookByIdAsync(Guid id, bool trackChanges)
         {
             var book = await _bookRepo.GetByIdAsync(id);
 
@@ -52,6 +52,15 @@ namespace LibraryApi.Services.Implementations
         public async Task<Book> CreateBookAsync(Book book)
         {
             return await _bookRepo.AddAsync(book);
+        }
+
+        public async Task<IEnumerable<ViewBookDto>> GetBooksByAuthorIdAsync(Guid id)
+        {
+            var books = await Task.FromResult(_bookRepo.GetByCondition(b => b.AuthorId == id));
+
+            if (books is null) return null;
+
+            return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
         public void DeleteBook(Book book)

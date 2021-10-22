@@ -11,7 +11,8 @@ namespace LibraryApi.Services.Interfaces
     public interface IBookService
     {
         Task<Book> CreateBookAsync(Book book);
-        Task<ViewBookDto> GetBookByIdAsync(Guid id);
+        Task<IEnumerable<ViewBookDto>> GetBooksByAuthorIdAsync(Guid id);
+        Task<ViewBookDto> GetBookByIdAsync(Guid id, bool trackChanges);
         Task<IEnumerable<ViewBookDto>> GetBooksAsync();
         Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
         void UpdateBook(Book book);
