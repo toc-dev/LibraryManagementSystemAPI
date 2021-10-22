@@ -1,4 +1,4 @@
-﻿using LibraryApi.Data.Interfaces;
+﻿/*using LibraryApi.Data.Interfaces;
 using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
@@ -34,11 +34,6 @@ namespace LibraryApi.Services.Implementations
             return await _authorService.CreateAuthorAsync(author);
         }
 
-        public async Task<Book> CreateBookAsync(Book book)
-        {
-            return await _bookService.CreateBookAsync(book);
-        }
-
         public async Task<Category> CreateCategoryAsync(Category category)
         {
             return await _categoryService.CreateCategoryAsync(category);
@@ -49,10 +44,6 @@ namespace LibraryApi.Services.Implementations
             _authorService.DeleteAuthor(author);
         }
 
-        public void DeleteBook(Book book)
-        {
-            _bookService.DeleteBook(book);
-        }
 
         public void DeleteCategory(Category category)
         {
@@ -99,14 +90,10 @@ namespace LibraryApi.Services.Implementations
             _authorService.UpdateAuthor(author);
         }
 
-        public void UpdateBook(Book book)
-        {
-            _bookService.UpdateBook(book);
-        }
-
         public void UpdateCategory(Category category)
         {
             _categoryService.UpdateCategory(category);
         }
     }
 }
+*/

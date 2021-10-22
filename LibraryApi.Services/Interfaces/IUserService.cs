@@ -16,12 +16,6 @@ namespace LibraryApi.Services.Interfaces
 
         Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
 
-        Task<Book> CreateBookAsync(Book book);
-
-        void UpdateBook(Book book);
-
-        void DeleteBook(Book book);
-
         Task<Author> CreateAuthorAsync(Author author);
 
         void UpdateAuthorAsync(Author author);

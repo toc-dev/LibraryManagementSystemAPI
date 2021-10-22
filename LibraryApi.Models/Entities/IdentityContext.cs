@@ -43,6 +43,7 @@ namespace LibraryApi.Models.Entities
             builder.ApplyConfiguration<Category>(new CategoryConfiguration());
             builder.ApplyConfiguration<Author>(new AuthorConfiguration());
             builder.ApplyConfiguration<Book>(new BookConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Author> Authors { get; set; }

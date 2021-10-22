@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LibraryApi.Controllers
@@ -28,8 +29,7 @@ namespace LibraryApi.Controllers
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            IAuthenticationManager authenticationManager
-            )
+            IAuthenticationManager authenticationManager)
         {
             _context = context;
             _mapper = mapper;
@@ -38,7 +38,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("users"), Authorize]
+        [Route("users"), Authorize(Policy = "AdminClaimPolicy")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -46,10 +46,11 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(UserForRegistrationDTO userForRegistration)
+        public async Task<IActionResult> RegisterUser([FromBody]UserForRegistrationDTO userForRegistration)
         {         
             var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+
 
             if (!result.Succeeded)
             {
@@ -59,6 +60,7 @@ namespace LibraryApi.Controllers
                 }
                 return BadRequest(ModelState);
             }
+            await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             
             return Ok(user);
         }

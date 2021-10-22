@@ -30,6 +30,9 @@ namespace LibraryApi.Models.MappingConfiguration
                 opt => opt.MapFrom(src => src.YearPublished.Year));
 
             CreateMap<BookForUpdateDto, Book>();
+
+            CreateMap<CategoryForCreationDto, Category>();
+            CreateMap<Category, ViewCategoryDto>().ReverseMap();
         }
     }
 }

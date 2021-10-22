@@ -35,5 +35,11 @@ namespace LibraryApi.Controllers
         {
             return Ok(await _bookService.GetBooksByCategoryAsync(category));
         }
+
+        /*[HttpGet("{id}/request")]
+        public async Task<IActionResult> RequestBook(Guid id)
+        {
+
+        }*/
     }
 }
