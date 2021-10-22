@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LibraryApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
+using LibraryApi.Models.Enumerators;
 
 namespace LibraryApi.Extensions
 {
@@ -60,6 +61,7 @@ namespace LibraryApi.Extensions
             
             return services;
         }
+
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
@@ -70,21 +72,33 @@ namespace LibraryApi.Extensions
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
-            {
+            .AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
+                    ValidAudience = jwtSettings.GetSection("validAudience").Value,
+                    IssuerSigningKey = new 
+                    SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
+        }
 
-                        ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
-                        ValidAudience = jwtSettings.GetSection("validAudience").Value,
-                        IssuerSigningKey = new 
-                        SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-                    };
-                });
+        public static void AddClaimsAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(options => {
+                options.AddPolicy("AdminClaimPolicy",
+                    policy => policy.RequireRole(AppRole.Admin.ToString()));
+
+                options.AddPolicy("AuthorClaimPolicy",
+                    policy => policy.RequireRole(AppRole.Author.ToString()));
+                
+                options.AddPolicy("UserClaimPolicy",
+                    policy => policy.RequireRole(AppRole.User.ToString()));
+            });
         }
     }
 }

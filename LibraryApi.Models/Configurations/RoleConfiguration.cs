@@ -19,16 +19,17 @@ namespace LibraryApi.Models.Configurations
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
-            new IdentityRole
-            {
-                Name = "Author",
-                NormalizedName = "AUTHOR"
-            },
-            new IdentityRole
-            {
-                Name = "User",
-                NormalizedName = "USER"
-            });
+                new IdentityRole
+                {
+                    Name = "Author",
+                    NormalizedName = "AUTHOR"
+                },
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            );
         }
     }
 }
