@@ -75,5 +75,8 @@ namespace LibraryApi.Controllers
             }
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
+        [HttpPost("logout")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> Logout()
     }
 }
