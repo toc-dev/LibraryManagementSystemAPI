@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using LibraryApi.Extensions;
 
 namespace LibraryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "UserClaimPolicy")]
+    [Authorize(Policy = "RequireAnyRole")]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -36,6 +37,10 @@ namespace LibraryApi.Controllers
             return Ok(await _bookService.GetBooksByCategoryAsync(category));
         }
 
-        
+        /*[HttpGet("{id}/request")]
+        public async Task<IActionResult> RequestBook(Guid id)
+        {
+
+        }*/
     }
 }

@@ -1,6 +1,4 @@
 using LibraryApi.Extensions;
-using LibraryApi.Services.Implementations;
-using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace LibraryApi
 {
@@ -35,8 +29,9 @@ namespace LibraryApi
             services.AddClaimsAuthorization();
             services.RegisterServices();
 
+            // To access automapper from any assembly.
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
-            //services.AddAutoMapper(Assembly.Load("LibraryApi"));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
