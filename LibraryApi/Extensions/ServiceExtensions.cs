@@ -14,6 +14,9 @@ using System.Text;
 using LibraryApi.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApi.Models.Enumerators;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Linq;
 
 namespace LibraryApi.Extensions
 {
@@ -64,6 +67,8 @@ namespace LibraryApi.Extensions
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             var jwtSettings = configuration.GetSection("JwtSettings");
             var secretKey = Environment.GetEnvironmentVariable("SECRET");
 
@@ -102,9 +107,20 @@ namespace LibraryApi.Extensions
                 options.AddPolicy("RequireAuthorOrAdminRole",
                     policy => policy.RequireRole(AppRole.Author.ToString(), AppRole.Admin.ToString()));
 
+                options.AddPolicy("RequireUserOrAuthorRole",
+                    policy => policy.RequireRole(AppRole.User.ToString(), AppRole.Author.ToString()));
+
                 options.AddPolicy("RequireAnyRole",
                     policy => policy.RequireRole(AppRole.Admin.ToString(), AppRole.Author.ToString(), AppRole.User.ToString()));
             });
+        }
+
+        public static Guid GetLoggedInUserId(this ClaimsPrincipal user)
+        {
+            var userId = user?.Claims?.FirstOrDefault(c =>
+                c.Type.Equals(ClaimTypes.NameIdentifier, StringComparison.OrdinalIgnoreCase))?.Value;
+
+            return Guid.Parse(userId);
         }
     }
 }

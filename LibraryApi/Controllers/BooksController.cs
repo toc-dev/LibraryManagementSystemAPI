@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using LibraryApi.Extensions;
 
 namespace LibraryApi.Controllers
 {
@@ -36,10 +37,13 @@ namespace LibraryApi.Controllers
             return Ok(await _bookService.GetBooksByCategoryAsync(category));
         }
 
-        /*[HttpGet("{id}/request")]
-        public async Task<IActionResult> RequestBook(Guid id)
+        [HttpGet("{id}/request")]
+        [Authorize(Policy = "RequireUserOrAuthorRole")]
+        public IActionResult RequestBook(Guid id)
         {
+            var userId = HttpContext.User.GetLoggedInUserId();
 
-        }*/
+            return Ok(new { UserId = userId });
+        }
     }
 }
