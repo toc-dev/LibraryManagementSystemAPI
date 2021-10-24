@@ -18,7 +18,7 @@ namespace LibraryApi.Models.Dtos
         [Required(ErrorMessage = "AuthorId is mandatory!")]
         public Guid AuthorId { get; set; }
         [Required(ErrorMessage = "Specify categories!")]
-        public ICollection<string> Categories { get; set; }
+        public string Categories { get; set; }
         [Required(ErrorMessage = "Who's adding this book?")]
         public string CreatedBy { get; set; }
     }

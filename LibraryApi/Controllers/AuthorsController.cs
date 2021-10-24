@@ -15,6 +15,8 @@ namespace LibraryApi.Controllers
 {
     [Route("api/authors")]
     [ApiController]
+   /* [Authorize(Policy = "AuthorClaimPolicy")]
+    [Authorize(Policy = "AdminClaimPolicy")]*/
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService authorService;
@@ -34,7 +36,6 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAuthors()
         {
             var authors = await authorService.GetAuthorsAsync();
@@ -65,9 +66,12 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPost("{id}/books")]
-        public async Task<IActionResult> AddAuthorBook([FromBody]BookForCreationDto bookForCreationDto)
+        public async Task<IActionResult> AddAuthorBook(Guid id, [FromBody]BookForCreationDto bookForCreationDto)
         {
             if (bookForCreationDto == null) return BadRequest();
+            var author = authorService.GetAuthorByIdAsync(id, trackChanges: false);
+            if (author == null) return BadRequest("AuthorId is invalid or null!");
+
             var book = mapper.Map<Book>(bookForCreationDto);
 
             var bookAdded = await bookService.CreateBookAsync(book);
@@ -101,16 +105,18 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPut("{authorId}/books/{id}")]
-        public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto book, Guid id)
+        public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto bookForUpdate, Guid id)
         {
             var author = authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
-            if (book == null) return BadRequest("Book is null");
-            var bookToUpdate = await bookService.GetBookByIdAsync(id, trackChanges: true);
+            if (bookForUpdate == null) return BadRequest("Book is null");
+            var book = bookService.GetBookByIdAsync(id, trackChanges: true);
 
-            mapper.Map(bookToUpdate, book);
-            unitOfWork.SaveChanges();
+            var bookToUpdate = mapper.Map<Book>(book);
+
+            mapper.Map(bookForUpdate, bookToUpdate);
+            await unitOfWork.SaveChangesAsync();
 
             return NoContent();
         }

@@ -42,6 +42,7 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> RequestBook(Guid id)
         {
             var userId = HttpContext.User.GetLoggedInUserId();
+
             return Ok(await _bookService.RequestBook(userId, id));
         }
     }
