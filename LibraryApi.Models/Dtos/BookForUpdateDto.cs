@@ -10,6 +10,6 @@ namespace LibraryApi.Models.Dtos
     {
         public string Title { get; set; }
         public string ISBN { get; set; }
- 
+        public DateTime YearPublished { get; set; }
     }
 }

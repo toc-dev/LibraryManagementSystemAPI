@@ -37,13 +37,10 @@ namespace LibraryApi.Controllers
             return Ok(await _bookService.GetBooksByCategoryAsync(category));
         }
 
-        [HttpGet("{id}/request")]
-        [Authorize(Policy = "RequireUserOrAuthorRole")]
-        public IActionResult RequestBook(Guid id)
+        /*[HttpGet("{id}/request")]
+        public async Task<IActionResult> RequestBook(Guid id)
         {
-            var userId = HttpContext.User.GetLoggedInUserId();
 
-            return Ok(new { UserId = userId });
-        }
+        }*/
     }
 }

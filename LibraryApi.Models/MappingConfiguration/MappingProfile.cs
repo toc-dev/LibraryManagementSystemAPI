@@ -27,11 +27,16 @@ namespace LibraryApi.Models.MappingConfiguration
 
             CreateMap<Book, ViewBookDto>()
                 .ForMember(dest => dest.YearPublished,
-                opt => opt.MapFrom(src => src.YearPublished.Year));
+                opt => opt.MapFrom(src => src.YearPublished.Year)).ReverseMap();
+
+            CreateMap<BookForCreationDto, Book>();
 
             CreateMap<BookForUpdateDto, Book>();
 
+            //CreateMap<ViewBookDto, Book>()
+
             CreateMap<CategoryForCreationDto, Category>();
+
             CreateMap<Category, ViewCategoryDto>().ReverseMap();
         }
     }
