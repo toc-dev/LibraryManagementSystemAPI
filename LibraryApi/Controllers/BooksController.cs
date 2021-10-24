@@ -39,11 +39,10 @@ namespace LibraryApi.Controllers
 
         [HttpGet("{id}/request")]
         [Authorize(Policy = "RequireUserOrAuthorRole")]
-        public IActionResult RequestBook(Guid id)
+        public async Task<IActionResult> RequestBook(Guid id)
         {
             var userId = HttpContext.User.GetLoggedInUserId();
-
-            return Ok(new { UserId = userId });
+            return Ok(await _bookService.RequestBook(userId, id));
         }
     }
 }
