@@ -111,13 +111,10 @@ namespace LibraryApi.Controllers
             if (author == null) return BadRequest("AuthorId is invalid!");
 
             if (bookForUpdate == null) return BadRequest("Book is null");
-            var book = bookService.GetBookByIdAsync(id, trackChanges: true);
+            var book = bookService.GetBookByIdForUpdateAsync(id, trackChanges: true);
 
-            var bookToUpdate = mapper.Map<Book>(book);
-
-            mapper.Map(bookForUpdate, bookToUpdate);
-            await unitOfWork.SaveChangesAsync();
-
+            mapper.Map(bookForUpdate, await book);
+            unitOfWork.SaveChanges();
             return NoContent();
         }
 
