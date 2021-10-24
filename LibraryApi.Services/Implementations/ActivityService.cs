@@ -13,15 +13,13 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Activity> _activityRepo;
-        private readonly IRepository<User> _userRepo;
 
-        public ActivityService(IUnitOfWork unitOfWork, IUserService userService)
+        public ActivityService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _activityRepo = unitOfWork.GetRepository<Activity>();
-            _userRepo = unitOfWork.GetRepository<User>();
-
         }
+
         public async Task<IEnumerable<Activity>> GetActivities()
         {
             return await _activityRepo.GetAllAsync();
@@ -34,6 +32,13 @@ namespace LibraryApi.Services.Implementations
 
         public async Task<Activity> CreateActivity(Activity activity)
         {
+            // Check if user has book already requested book by comparing the due date with new request date
+            var result = await _activityRepo.AnyAsync(a => a.UserId == activity.UserId && a.BookId == activity.BookId
+                        && DateTime.Compare(DateTime.Now, a.DueDate) <= 0);
+
+            if (result)
+                return null;
+
             return await _activityRepo.AddAsync(activity);
         }
     }

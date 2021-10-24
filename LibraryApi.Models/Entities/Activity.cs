@@ -15,8 +15,8 @@ namespace LibraryApi.Models.Entities
         [ForeignKey(nameof(Book))]
         public Guid BookId { get; set; }
         public Book Book { get; set; }
-        public DateTime RequestDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime RequestDate { get; set; } = DateTime.Now;
+        public DateTime DueDate { get; set; } = DateTime.Now.AddDays(10);
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }

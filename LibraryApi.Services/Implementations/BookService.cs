@@ -15,11 +15,13 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Book> _bookRepo;
+        private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
 
-        public BookService(IUnitOfWork unitOfWork, IMapper mapper)
+        public BookService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _serviceFactory = serviceFactory;
             _bookRepo = unitOfWork.GetRepository<Book>();
             _mapper = mapper;
         }
@@ -76,13 +78,21 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
-        public async Task<Book> GetBookByIdForUpdateAsync(Guid id, bool trackChanges)
+        public async Task<Activity> RequestBook(Guid userId, Guid bookId)
         {
-            var book = await _bookRepo.GetByIdAsync(id);
+            var isValidBookId = await _bookRepo.AnyAsync(b => b.Id == bookId);
 
-            if (book is null) return null;
+            if (!isValidBookId)
+                return null;
 
-            return book;
+            var activity = new Activity
+            {
+                BookId = bookId,
+                UserId = userId,
+            };
+
+            IActivityService activityService = _serviceFactory.GetService<IActivityService>();
+            return await activityService.CreateActivity(activity);
         }
     }
 }
