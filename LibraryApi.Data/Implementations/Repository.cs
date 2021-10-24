@@ -11,7 +11,6 @@ namespace LibraryApi.Data.Implementations
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private bool disposedValue = false;
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
