@@ -94,5 +94,10 @@ namespace LibraryApi.Services.Implementations
             IActivityService activityService = _serviceFactory.GetService<IActivityService>();
             return await activityService.CreateActivity(activity);
         }
+
+        public async Task<Book> GetBookByIdForUpdateAsync(Guid id, bool trackChanges)
+        {
+            return await _bookRepo.GetByIdAsync(id);
+        }
     }
 }

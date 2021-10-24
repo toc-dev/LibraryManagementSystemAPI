@@ -107,13 +107,13 @@ namespace LibraryApi.Controllers
         [HttpPut("{authorId}/books/{id}")]
         public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto bookForUpdate, Guid id)
         {
-            var author = authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
+            var author = await authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
             if (bookForUpdate == null) return BadRequest("Book is null");
-            var book = bookService.GetBookByIdForUpdateAsync(id, trackChanges: true);
+            var book = await bookService.GetBookByIdForUpdateAsync(id, trackChanges: true);
 
-            mapper.Map(bookForUpdate, await book);
+            mapper.Map(bookForUpdate, book);
             unitOfWork.SaveChanges();
             return NoContent();
         }
