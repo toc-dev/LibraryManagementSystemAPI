@@ -32,6 +32,7 @@ namespace LibraryApi.Models.MappingConfiguration
             CreateMap<BookForCreationDto, Book>();
 
             CreateMap<BookForUpdateDto, Book>();
+            CreateMap<UserForUpdateDTO, User>();
 
             //CreateMap<ViewBookDto, Book>()
 
