@@ -101,19 +101,31 @@ namespace LibraryApi.Controllers
             await _userManager.UpdateAsync(mappedDetails);
             return Ok(user);
         }
-        /**
-        [Authorize]
-        [HttpPost("logout")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> Logout()
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            string rawUserId = HttpContext.User.FindFirstValue("id");
-            if (!Guid.TryParse(rawUserId, out Guid userId))
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
-                return Unauthorized();
+                return BadRequest("User not found!");
             }
-            return Ok();
+            var rolesForUser = await _userManager.GetRolesAsync(user);
+            await _userManager.DeleteAsync(user);
+            return Ok(user);
+            /**
+            [Authorize]
+            [HttpPost("logout")]
+            //[ServiceFilter(typeof(ValidationFilterAttribute))]
+            public async Task<IActionResult> Logout()
+            {
+                string rawUserId = HttpContext.User.FindFirstValue("id");
+                if (!Guid.TryParse(rawUserId, out Guid userId))
+                {
+                    return Unauthorized();
+                }
+                return Ok();
+            }
+            **/
         }
-        **/
-    }
 }
