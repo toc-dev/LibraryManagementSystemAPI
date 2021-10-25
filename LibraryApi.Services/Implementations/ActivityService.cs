@@ -27,7 +27,7 @@ namespace LibraryApi.Services.Implementations
 
         public async Task<IEnumerable<Activity>> GetUserActivities(Guid id)
         {
-            return await Task.FromResult(_activityRepo.GetByCondition(b => b.UserId == id));
+            return await Task.FromResult(_activityRepo.GetByCondition(b => b.UserId == id, includeProperties: "Books"));
         }
 
         public async Task<Activity> CreateActivity(Activity activity)

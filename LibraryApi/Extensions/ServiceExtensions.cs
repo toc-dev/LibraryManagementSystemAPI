@@ -96,22 +96,22 @@ namespace LibraryApi.Extensions
         {
             services.AddAuthorization(options => {
                 options.AddPolicy("RequireAdminRole",
-                    policy => policy.RequireClaim(AppRole.Admin.ToString()));
+                    policy => policy.RequireRole(AppRole.Admin.ToString()));
 
                 options.AddPolicy("RequireAuthorRole",
-                    policy => policy.RequireClaim(AppRole.Author.ToString()));
+                    policy => policy.RequireRole(AppRole.Author.ToString()));
                 
                 options.AddPolicy("RequireUserOrAdminRole",
-                    policy => policy.RequireClaim(AppRole.User.ToString(), AppRole.Admin.ToString()));
+                    policy => policy.RequireRole(AppRole.User.ToString(), AppRole.Admin.ToString()));
 
                 options.AddPolicy("RequireAuthorOrAdminRole",
-                    policy => policy.RequireClaim(AppRole.Author.ToString(), AppRole.Admin.ToString()));
+                    policy => policy.RequireRole(AppRole.Author.ToString(), AppRole.Admin.ToString()));
 
                 options.AddPolicy("RequireUserOrAuthorRole",
-                    policy => policy.RequireClaim(AppRole.User.ToString(), AppRole.Author.ToString()));
+                    policy => policy.RequireRole(AppRole.User.ToString(), AppRole.Author.ToString()));
 
                 options.AddPolicy("RequireAnyRole",
-                    policy => policy.RequireClaim(AppRole.Admin.ToString(), AppRole.Author.ToString(), AppRole.User.ToString()));
+                    policy => policy.RequireRole(AppRole.Admin.ToString(), AppRole.Author.ToString(), AppRole.User.ToString()));
             });
         }
 

@@ -17,7 +17,7 @@ namespace LibraryApi.Models.Entities
         public DateTime YearPublished { get; set; }
         [ForeignKey(nameof(Author))]
         public Guid AuthorId { get; set; }
-        public Author Author { get; set; }
+        public virtual Author Author { get; set; }
         public string Category { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
