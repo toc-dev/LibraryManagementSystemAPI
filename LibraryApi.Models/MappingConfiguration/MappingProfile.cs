@@ -34,11 +34,14 @@ namespace LibraryApi.Models.MappingConfiguration
             CreateMap<BookForUpdateDto, Book>();
             CreateMap<UserForUpdateDTO, User>();
 
-            //CreateMap<ViewBookDto, Book>()
-
             CreateMap<CategoryForCreationDto, Category>();
 
             CreateMap<Category, ViewCategoryDto>().ReverseMap();
+
+            CreateMap<Activity, ViewActivityDto>()
+                .ForMember(dest => dest.BookAuthor, opt => opt.MapFrom(src => src.Book.Author))
+                .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title));
+
         }
     }
 }

@@ -44,7 +44,10 @@ namespace LibraryApi.Data.Implementations
 
         }
 
-        public IEnumerable<T> GetByCondition(Expression<Func<T, bool>> predicate = null, Func<IQueryable, IOrderedQueryable> orderby = null, int? skip = null, int? take = null, params string[] includePropertiess)
+        public IEnumerable<T> GetByCondition(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable, IOrderedQueryable> orderby = null,
+            int? skip = null, int? take = null,
+            params string[] includeProperties)
         {
             if (predicate is null) return _dbSet.ToList();
             return _dbSet.Where(predicate);
@@ -60,7 +63,9 @@ namespace LibraryApi.Data.Implementations
             return await _dbSet.FindAsync(id);
         }
 
-        public T GetSingleByCondition(Expression<Func<T, bool>> predicate = null, Func<IQueryable, IOrderedQueryable> orderby = null, params string[] includeProperties)
+        public T GetSingleByCondition(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable, IOrderedQueryable> orderby = null,
+            params string[] includeProperties)
         {
             if (predicate is null) return _dbSet.ToList().FirstOrDefault();
             return _dbSet.Where(predicate).FirstOrDefault();

@@ -33,7 +33,7 @@ namespace LibraryApi.Services.Implementations
             return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
-        public async Task<ViewBookDto> GetBookByIdAsync(Guid id, bool trackChanges)
+        public async Task<ViewBookDto> GetBookByIdAsync(Guid id)
         {
             var book = await _bookRepo.GetByIdAsync(id);
 
@@ -93,6 +93,11 @@ namespace LibraryApi.Services.Implementations
 
             IActivityService activityService = _serviceFactory.GetService<IActivityService>();
             return await activityService.CreateActivity(activity);
+        }
+
+        public async Task<Book> GetBookByIdForUpdateAsync(Guid id, bool trackChanges)
+        {
+            return await _bookRepo.GetByIdAsync(id);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using LibraryApi.Data.Interfaces;
+﻿using AutoMapper;
+using LibraryApi.Data.Interfaces;
+using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using System;
@@ -13,24 +15,28 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Activity> _activityRepo;
+        private readonly IMapper _mapper;
 
-        public ActivityService(IUnitOfWork unitOfWork)
+        public ActivityService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _activityRepo = unitOfWork.GetRepository<Activity>();
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Activity>> GetActivities()
+        public async Task<IEnumerable<ViewActivityDto>> GetActivities()
         {
-            return await _activityRepo.GetAllAsync();
+            var activities = await _activityRepo.GetAllAsync();
+            return _mapper.Map<IEnumerable<ViewActivityDto>>(activities);
         }
 
-        public async Task<IEnumerable<Activity>> GetUserActivities(Guid id)
+        public async Task<IEnumerable<ViewActivityDto>> GetUserActivities(Guid id)
         {
-            return await Task.FromResult(_activityRepo.GetByCondition(b => b.UserId == id));
+            var activities = await Task.FromResult(_activityRepo.GetByCondition(b => b.UserId == id, includeProperties: "Books"));
+            return _mapper.Map<IEnumerable<ViewActivityDto>>(activities);
         }
 
-        public async Task<Activity> CreateActivity(Activity activity)
+        public async Task<ViewActivityDto> CreateActivity(Activity activity)
         {
             // Check if user has book already requested book by comparing the due date with new request date
             var result = await _activityRepo.AnyAsync(a => a.UserId == activity.UserId && a.BookId == activity.BookId
@@ -39,7 +45,8 @@ namespace LibraryApi.Services.Implementations
             if (result)
                 return null;
 
-            return await _activityRepo.AddAsync(activity);
+            var activities = await _activityRepo.AddAsync(activity);
+            return _mapper.Map<ViewActivityDto>(activity);
         }
     }
 }
