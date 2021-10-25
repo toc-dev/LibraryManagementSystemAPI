@@ -47,7 +47,7 @@ namespace LibraryApi.Data.Implementations
         public IEnumerable<T> GetByCondition(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable, IOrderedQueryable> orderby = null,
             int? skip = null, int? take = null,
-            params string[] includePropertiess)
+            params string[] includeProperties)
         {
             if (predicate is null) return _dbSet.ToList();
             return _dbSet.Where(predicate);

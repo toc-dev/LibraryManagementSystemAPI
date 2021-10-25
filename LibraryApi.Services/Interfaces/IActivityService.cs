@@ -1,4 +1,5 @@
-﻿using LibraryApi.Models.Entities;
+﻿using LibraryApi.Models.Dtos;
+using LibraryApi.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IActivityService
     {
-        Task<IEnumerable<Activity>> GetActivities();
-        Task<IEnumerable<Activity>> GetUserActivities(Guid id);
-        Task<Activity> CreateActivity(Activity activity);
+        Task<IEnumerable<ViewActivityDto>> GetActivities();
+        Task<IEnumerable<ViewActivityDto>> GetUserActivities(Guid id);
+        Task<ViewActivityDto> CreateActivity(Activity activity);
     }
 }
