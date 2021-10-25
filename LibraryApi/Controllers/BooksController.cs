@@ -43,7 +43,11 @@ namespace LibraryApi.Controllers
         {
             var userId = HttpContext.User.GetLoggedInUserId();
 
-            return Ok(await _bookService.RequestBook(userId, id));
+            var request = await _bookService.RequestBook(userId, id);
+            if (request is null)
+                return BadRequest("You already requested for this book!");
+
+            return Ok(request);
         }
     }
 }
