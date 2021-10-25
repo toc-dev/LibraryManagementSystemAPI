@@ -28,7 +28,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(Guid id)
         {
-            return Ok(await _bookService.GetBookByIdAsync(id, trackChanges: false));
+            return Ok(await _bookService.GetBookByIdAsync(id));
         }
 
         [HttpGet("category/{category}")]

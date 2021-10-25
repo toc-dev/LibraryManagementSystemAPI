@@ -38,7 +38,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
-        [Route("users"), Authorize(Policy = "AdminClaimPolicy")]
+        [Route("users"), Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -75,5 +75,11 @@ namespace LibraryApi.Controllers
             }
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
+        //[HttpPost("logout")]
+        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        //public async Task<IActionResult> Logout()
+        //{
+        //    return 
+        //}
     }
 }
