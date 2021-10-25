@@ -41,6 +41,7 @@ namespace LibraryApi.Services.Implementations
                 //Password = registerUser.Password
             };
             _userRepository.Add(user);
+
             affectedRows = _unitOfWork.SaveChanges();
             return user;
         }
