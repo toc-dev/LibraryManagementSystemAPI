@@ -18,6 +18,6 @@ namespace LibraryApi.Services.Interfaces
         Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
         void UpdateBook(Book book);
         void DeleteBook(Book book);
-        Task<Activity> RequestBook(Guid userId, Guid bookId);
+        Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId);
     }
 }

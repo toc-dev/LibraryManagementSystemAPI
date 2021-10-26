@@ -30,12 +30,6 @@ namespace LibraryApi
             services.AddClaimsAuthorization();
             services.RegisterServices();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole",
-                    policy => policy.RequireClaim(AppRole.Admin.ToString()));
-            });
-
             // To access automapper from any assembly.
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
 
