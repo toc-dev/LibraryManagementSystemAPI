@@ -36,7 +36,7 @@ namespace LibraryApi.Services.Implementations
             return _mapper.Map<IEnumerable<ViewActivityDto>>(activities);
         }
 
-        public async Task<Activity> CreateActivity(Activity activity)
+        public async Task<ViewActivityDto> CreateActivity(Activity activity)
         {
             // Check if user has book already requested book by comparing the due date with new request date
             var result = await _activityRepo.AnyAsync(a => a.UserId == activity.UserId && a.BookId == activity.BookId
@@ -45,8 +45,8 @@ namespace LibraryApi.Services.Implementations
             if (result)
                 return null;
 
-            var activities = await _activityRepo.AddAsync(activity);
-            return activities;
+            var newActivity = await _activityRepo.AddAsync(activity);
+            return _mapper.Map<ViewActivityDto>(newActivity);
         }
 
        

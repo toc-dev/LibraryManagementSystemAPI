@@ -78,7 +78,7 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
-        public async Task<Activity> RequestBook(Guid userId, Guid bookId)
+        public async Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId)
         {
             var isValidBookId = await _bookRepo.AnyAsync(b => b.Id == bookId);
 
