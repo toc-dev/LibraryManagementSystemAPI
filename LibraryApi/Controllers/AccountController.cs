@@ -113,6 +113,7 @@ namespace LibraryApi.Controllers
             var rolesForUser = await _userManager.GetRolesAsync(user);
             await _userManager.DeleteAsync(user);
             return Ok(user);
+        }
             /**
             [Authorize]
             [HttpPost("logout")]
