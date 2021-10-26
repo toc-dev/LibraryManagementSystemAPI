@@ -25,7 +25,7 @@ namespace LibraryApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthenticationManager _authenticationManager;
-        
+
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
@@ -46,8 +46,8 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody]UserForRegistrationDTO userForRegistration)
-        {         
+        public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
+        {
             var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
@@ -61,7 +61,7 @@ namespace LibraryApi.Controllers
                 return BadRequest(ModelState);
             }
             await _userManager.AddToRoleAsync(user, userForRegistration.Role.ToString());
-            
+
             return Ok(user);
         }
 
@@ -75,11 +75,58 @@ namespace LibraryApi.Controllers
             }
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
-        //[HttpPost("logout")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    return 
-        //}
-    }
+
+        [HttpGet("getuser/{id}")]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+            return Ok(user);
+        }
+        
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserForUpdateDTO userForUpdate)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+            var userToUpdate = _mapper.Map<User>(user);
+            var mappedDetails = _mapper.Map(userForUpdate, userToUpdate);
+            await _userManager.ChangePasswordAsync(user, userForUpdate.CurrentPassword, userForUpdate.NewPassword);
+            await _userManager.UpdateAsync(mappedDetails);
+            return Ok(user);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+            var rolesForUser = await _userManager.GetRolesAsync(user);
+            await _userManager.DeleteAsync(user);
+            return Ok(user);
+        }
+            /**
+            [Authorize]
+            [HttpPost("logout")]
+            //[ServiceFilter(typeof(ValidationFilterAttribute))]
+            public async Task<IActionResult> Logout()
+            {
+                string rawUserId = HttpContext.User.FindFirstValue("id");
+                if (!Guid.TryParse(rawUserId, out Guid userId))
+                {
+                    return Unauthorized();
+                }
+                return Ok();
+            }
+            **/
+        }
 }

@@ -15,8 +15,6 @@ namespace LibraryApi.Controllers
 {
     [Route("api/authors")]
     [ApiController]
-   /* [Authorize(Policy = "AuthorClaimPolicy")]
-    [Authorize(Policy = "AdminClaimPolicy")]*/
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService authorService;
@@ -36,6 +34,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> GetAuthors()
         {
             var authors = await authorService.GetAuthorsAsync();
@@ -45,6 +44,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetAuthor")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> GetSingleAuthor(Guid id)
         {
             var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
@@ -54,6 +54,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> AddSingleAuthor([FromBody]AuthorForCreationDto authorForCreationDto)
         {
             if (authorForCreationDto == null) return BadRequest();
@@ -66,6 +67,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPost("{id}/books")]
+        [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> AddAuthorBook(Guid id, [FromBody]BookForCreationDto bookForCreationDto)
         {
             if (bookForCreationDto == null) return BadRequest();
@@ -81,6 +83,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody]AuthorForUpdateDto authorForUpdateDto)
         {
             if (authorForUpdateDto == null) return BadRequest("authorDto is null!");
@@ -95,6 +98,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> DeleteAuthor(Guid id)
         {
             var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
@@ -105,6 +109,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpPut("{authorId}/books/{id}")]
+        [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto bookForUpdate, Guid id)
         {
             var author = await authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
@@ -119,6 +124,7 @@ namespace LibraryApi.Controllers
         }
 
         [HttpGet("{id}/books")]
+        [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> GetAuthorBooks(Guid id)
         {
             var books = await bookService.GetBooksByAuthorIdAsync(id);
