@@ -87,7 +87,7 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
         
-        [HttpPut("update/{id}")]
+        [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UserForUpdateDTO userForUpdate)
         {
             var user = await _userManager.FindByIdAsync(id);
