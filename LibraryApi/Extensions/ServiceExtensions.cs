@@ -114,7 +114,6 @@ namespace LibraryApi.Extensions
                     policy => policy.RequireRole(AppRole.Admin.ToString(), AppRole.Author.ToString(), AppRole.User.ToString()));
             });
         }
-        public static void ConfigureLoggerService(this IServiceCollection services) => services.AddScoped<ILoggerManager, LoggerManager>();
 
         public static Guid GetLoggedInUserId(this ClaimsPrincipal user)
         {
