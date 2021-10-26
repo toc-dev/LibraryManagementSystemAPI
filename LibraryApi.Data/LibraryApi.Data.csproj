@@ -15,4 +15,9 @@
     <ProjectReference Include="..\LibraryApi.Models\LibraryApi.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Project\internal_logs\" />
+    <Folder Include="Project\logs\" />
+  </ItemGroup>
+
 </Project>
