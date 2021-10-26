@@ -87,7 +87,7 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
         
-        [HttpPut("update/{id}")]
+        [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UserForUpdateDTO userForUpdate)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -114,19 +114,5 @@ namespace LibraryApi.Controllers
             await _userManager.DeleteAsync(user);
             return Ok(user);
         }
-            /**
-            [Authorize]
-            [HttpPost("logout")]
-            //[ServiceFilter(typeof(ValidationFilterAttribute))]
-            public async Task<IActionResult> Logout()
-            {
-                string rawUserId = HttpContext.User.FindFirstValue("id");
-                if (!Guid.TryParse(rawUserId, out Guid userId))
-                {
-                    return Unauthorized();
-                }
-                return Ok();
-            }
-            **/
-        }
+    }
 }
