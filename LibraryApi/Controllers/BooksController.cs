@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using LibraryApi.Extensions;
+using AutoMapper;
+using LibraryApi.Models.Entities;
 
 namespace LibraryApi.Controllers
 {
@@ -13,10 +15,11 @@ namespace LibraryApi.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
-
-        public BooksController(IBookService bookService)
+        private readonly IMapper _mapper;
+        public BooksController(IBookService bookService, IMapper mapper)
         {
             _bookService = bookService;
+            _mapper = mapper;
         }
 
         [HttpGet("")]
@@ -48,6 +51,18 @@ namespace LibraryApi.Controllers
                 return BadRequest("You already requested for this book!");
 
             return Ok(request);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(Guid id)
+        {
+            var book = await _bookService.GetBookByIdAsync(id);
+            if (book is null)
+                return BadRequest("Book is null or invalid");
+            
+            var bookToDel = _mapper.Map<Book>(book);
+            _bookService.DeleteBook(bookToDel);
+
+            return NoContent();
         }
     }
 }
