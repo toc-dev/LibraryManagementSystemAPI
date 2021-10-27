@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using LibraryApi.Extensions;
-using AutoMapper;
-using LibraryApi.Models.Entities;
 
 namespace LibraryApi.Controllers
 {
@@ -15,11 +13,10 @@ namespace LibraryApi.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
-        private readonly IMapper _mapper;
-        public BooksController(IBookService bookService, IMapper mapper)
+
+        public BooksController(IBookService bookService)
         {
             _bookService = bookService;
-            _mapper = mapper;
         }
 
         [HttpGet("")]

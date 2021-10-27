@@ -81,14 +81,22 @@ namespace LibraryApi.Services.Implementations
         public async Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId)
         {
             var isValidBookId = await _bookRepo.AnyAsync(b => b.Id == bookId);
+            var book = _bookRepo.GetById(bookId);
 
             if (!isValidBookId)
+                return null;
+            if (book is null)
                 return null;
 
             var activity = new Activity
             {
                 BookId = bookId,
                 UserId = userId,
+                Book = new Book
+                {
+                    Title = book.Title,
+                    Author = book.Author
+                }
             };
 
             IActivityService activityService = _serviceFactory.GetService<IActivityService>();
