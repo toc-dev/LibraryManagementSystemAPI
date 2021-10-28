@@ -92,11 +92,6 @@ namespace LibraryApi.Services.Implementations
             {
                 BookId = bookId,
                 UserId = userId,
-                Book = new Book
-                {
-                    Title = book.Title,
-                    Author = book.Author
-                }
             };
 
             IActivityService activityService = _serviceFactory.GetService<IActivityService>();
