@@ -49,7 +49,7 @@ namespace LibraryApi.Controllers
 
             return Ok(request);
         }
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         [Authorize(Policy = "RequireAdminOrAuthorRole")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
@@ -61,6 +61,6 @@ namespace LibraryApi.Controllers
             _bookService.DeleteBook(bookToDel);
 
             return NoContent();
-        }
+        }*/
     }
 }

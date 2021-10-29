@@ -11,10 +11,16 @@ namespace LibraryApi.Models.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public bool IsDeleted { get; set; }
+
+        public Category()
+        {
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+        }
     }
 }
