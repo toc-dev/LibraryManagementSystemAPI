@@ -8,18 +8,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace LibraryApi.Services.Implementations
 {
     public class BookService : IBookService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Book> _bookRepo;
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
 
-        public BookService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
+        public BookService(IConfiguration configuration, IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
         {
+            _configuration = configuration;
             _unitOfWork = unitOfWork;
             _serviceFactory = serviceFactory;
             _bookRepo = unitOfWork.GetRepository<Book>();
@@ -81,11 +84,14 @@ namespace LibraryApi.Services.Implementations
         public async Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId)
         {
             var isValidBookId = await _bookRepo.AnyAsync(b => b.Id == bookId);
+            var book = _bookRepo.GetById(bookId);
 
             if (!isValidBookId)
                 return null;
+            if (book is null)
+                return null;
 
-            var activity = new Activity
+            var activity = new Activity(_configuration)
             {
                 BookId = bookId,
                 UserId = userId,

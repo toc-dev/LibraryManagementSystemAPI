@@ -49,5 +49,18 @@ namespace LibraryApi.Controllers
 
             return Ok(request);
         }
+        /*[HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdminOrAuthorRole")]
+        public async Task<IActionResult> DeleteBook(Guid id)
+        {
+            var book = await _bookService.GetBookByIdAsync(id);
+            if (book is null)
+                return BadRequest("Book is null or invalid");
+            
+            var bookToDel = _mapper.Map<Book>(book);
+            _bookService.DeleteBook(bookToDel);
+
+            return NoContent();
+        }*/
     }
 }
