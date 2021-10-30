@@ -33,7 +33,7 @@ namespace LibraryApi
             // To access automapper from any assembly.
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryApi", Version = "v1" });

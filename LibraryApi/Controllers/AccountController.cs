@@ -7,6 +7,7 @@ using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,16 +26,19 @@ namespace LibraryApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthenticationManager _authenticationManager;
+        
 
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
             IAuthenticationManager authenticationManager)
+            
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _authenticationManager = authenticationManager;
+            
         }
 
         [HttpGet]
@@ -88,17 +92,24 @@ namespace LibraryApi.Controllers
         }
         
         [HttpPatch("update/{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserForUpdateDTO userForUpdate)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
+            if (userForUpdate == null)
+            {
+                return BadRequest("Object is null");
+            }
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return BadRequest("User not found!");
             }
-            var userToUpdate = _mapper.Map<User>(user);
-            var mappedDetails = _mapper.Map(userForUpdate, userToUpdate);
-            await _userManager.ChangePasswordAsync(user, userForUpdate.CurrentPassword, userForUpdate.NewPassword);
-            await _userManager.UpdateAsync(mappedDetails);
+            
+            var userToUpdate = _mapper.Map<UserForUpdateDTO>(user);
+            userForUpdate.ApplyTo(userToUpdate);
+            _mapper.Map(userToUpdate, user);
+            
+            await _userManager.UpdateAsync(user);
+            
             return Ok(user);
         }
 
