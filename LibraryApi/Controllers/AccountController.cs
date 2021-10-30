@@ -49,9 +49,11 @@ namespace LibraryApi.Controllers
             return Ok(users);
         }
 
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
         {
+            if (userForRegistration == null) return BadRequest("Invalid!!");
             var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
@@ -69,16 +71,19 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
 
+
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO user)
         {
+            if (user == null) return BadRequest("Invalid!");
             if (!await _authenticationManager.ValidateUser(user))
             {
                 return Unauthorized();
             }
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
+
 
         [HttpGet("getuser/{id}")]
         public async Task<IActionResult> GetUser(string id)
@@ -90,6 +95,8 @@ namespace LibraryApi.Controllers
             }
             return Ok(user);
         }
+
+
         
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
@@ -112,6 +119,8 @@ namespace LibraryApi.Controllers
             
             return Ok(user);
         }
+
+
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
