@@ -47,13 +47,26 @@ namespace LibraryApi.Controllers
 
         [HttpGet]
         [Route("users"), Authorize(Policy = "RequireAdminRole")]
+        
+        // Gideon's Review
+        /*
+            Don't use UserManager<User> _userManager here since you have it in the UserService 
+            Move this implementation to the UserService Class
+            Remove all the items not used in the constructor, e.g the mapper
+         */
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
             return Ok(users);
         }
 
-
+        // Gideon's Review
+        /* I love what you did with the tuples, 
+         * but remember Davidson suggested to Alex 
+         * that she could parse those values to a newly created class
+         * and access that class as a return type.
+         * It's up to you to decide though.
+         */
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
         {
@@ -83,10 +96,17 @@ namespace LibraryApi.Controllers
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
 
-
+        // Gideon's Review
+        /* It's more conventional to use "user/{id}" as the route_name 
+        */
         [HttpGet("getuser/{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
+            /*
+             * Move this implementation to the UserService Class
+             * cos we don't want you using UserManager<User> _userManager here,
+             * since you have it in the UserService 
+            */
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
@@ -95,8 +115,11 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
 
-
-        [HttpPatch("update/{id}")]
+        // Gideon's Review
+        /* Since it's a PATCH request, there's no need for "update" in the route name
+         * it's more conventional to simply use {id}
+        */
+            [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
             if (userForUpdate == null) return BadRequest("Object is null");
@@ -107,6 +130,10 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
 
+        // Gideon's Review
+        /* Since it's a DELETE request, there's no need for "delete" in the route name
+         * it's more conventional to simply use {id}
+        */
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {

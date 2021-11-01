@@ -58,3 +58,4 @@ namespace LibraryApi.Services.Implementations
 }
 
 //I don't know why, but it appears injecting a IRepository<User> into a system containing IUserManager will cause the system to crash and burn
+// Of course, you can't implement CRUD operations from Repository Class with UserIdentity in this scenario. - Gideon Akunana
