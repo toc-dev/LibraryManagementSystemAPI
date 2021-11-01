@@ -22,6 +22,9 @@ namespace LibraryApi.Controllers
         private readonly IBookService bookService;
         private readonly IUnitOfWork unitOfWork;
 
+        /* Gideon's Review
+         * Remove properties that are no longer in use, "mapper", "unitOfWork"
+         */
         public AuthorsController(IAuthorService authorService, 
             IMapper mapper, 
             IBookService bookService,
@@ -76,6 +79,12 @@ namespace LibraryApi.Controllers
             return CreatedAtRoute("GetAuthor", new { id = book.AuthorId }, book);
         }
 
+
+        /* Gideon's Review
+         * Davidson advised during the review to use Patch instead of Put
+         * To be able to update properties excluding the "Name" property in the Author class.
+         * Please implement the Update method using PATCH
+         */
         [HttpPut("{id}")]
         [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody]AuthorForUpdateDto authorForUpdateDto)
@@ -106,7 +115,10 @@ namespace LibraryApi.Controllers
             var author = await authorService.GetAuthorByIdAsync(authorId);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
-            if (bookForUpdate == null) return BadRequest("Book is null");
+            /* Gideon's Review
+             * the line below should be checked first, move it to be the first.
+            */
+            if (bookForUpdate == null) return BadRequest("Book is null"); 
 
             bookService.UpdateBook(id, bookForUpdate);
 

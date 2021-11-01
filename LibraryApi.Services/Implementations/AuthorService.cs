@@ -36,6 +36,9 @@ namespace LibraryApi.Services.Implementations
         {
             var author = await _authorRepo.GetByIdAsync(id);
 
+            /* Gideon's Review
+             * Check if author is null before proceeding to update it
+             */
             author.IsDeleted = true;
 
             _authorRepo.Update(author);
@@ -43,6 +46,12 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
+        /* Gideon's Review
+         * Check for null where necessary
+         * GetAuthorByIdAsync(),
+         * GetAuthorsAsync()
+         * UpdateAuthor()
+         */
         public async Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId)
         {
             var author = await _authorRepo.GetByIdAsync(authorId);

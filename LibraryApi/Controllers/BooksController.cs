@@ -49,7 +49,11 @@ namespace LibraryApi.Controllers
 
             return Ok(request);
         }
-        [HttpDelete("{id}")]
+
+        /* Gideon's Review
+            KCM please refactor this method
+         */
+        /*[HttpDelete("{id}")]
         [Authorize(Policy = "RequireAdminOrAuthorRole")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
@@ -61,6 +65,6 @@ namespace LibraryApi.Controllers
             //_bookService.DeleteBook(bookToDel);
 
             return NoContent();
-        }
+        }*/
     }
 }
