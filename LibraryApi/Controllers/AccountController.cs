@@ -27,13 +27,13 @@ namespace LibraryApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthenticationManager _authenticationManager;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         
 
         public AccountController(IdentityContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            UserService userService,
+            IUserService userService,
             IAuthenticationManager authenticationManager)
             
         {
@@ -94,36 +94,24 @@ namespace LibraryApi.Controllers
             }
             return Ok(user);
         }
-        
+
+
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
             if (userForUpdate == null) return BadRequest("Object is null");
             var user = await _userService.PatchUser(id, userForUpdate);
             if (user == null) return BadRequest("User not found!");
-            /**
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return BadRequest("User not found!");
-            
-            var userToUpdate = _mapper.Map<UserForUpdateDTO>(user);
-            userForUpdate.ApplyTo(userToUpdate);
-            _mapper.Map(userToUpdate, user);
-            **/
             await _userManager.UpdateAsync(user);
-            
+
             return Ok(user);
         }
-
-
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return BadRequest("User not found!");
-            }
+            if (user == null) return BadRequest("User not found!");
             var rolesForUser = await _userManager.GetRolesAsync(user);
             await _userManager.DeleteAsync(user);
             return Ok(user);

@@ -19,18 +19,15 @@ namespace LibraryApi.Services.Implementations
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<User> _userRepository;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
         public UserService(IUnitOfWork unitOfWork,
-            IRepository<User> userRepository,
             UserManager<User> userManager,
             IMapper mapper
             )
         {
             _unitOfWork = unitOfWork;
-            _userRepository = userRepository;
             _userManager = userManager;
             _mapper = mapper;
         }
@@ -47,11 +44,17 @@ namespace LibraryApi.Services.Implementations
         public async Task<User> PatchUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
             var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return user;
+            }
             var userToUpdate = _mapper.Map<UserForUpdateDTO>(user);
             userForUpdate.ApplyTo(userToUpdate);
             _mapper.Map(userToUpdate, user);
 
-            return user;
+            return (user);
         }
     }
 }
+
+//I don't know why, but it appears injecting a IRepository<User> into a system containing IUserManager will cause the system to crash and burn

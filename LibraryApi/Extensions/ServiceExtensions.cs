@@ -59,6 +59,7 @@ namespace LibraryApi.Extensions
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IActivityService, ActivityService>();
             services.AddTransient<IServiceFactory, ServiceFactory>();
+            services.AddTransient<IUserService, UserService>();
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddScoped<ValidationFilterAttribute>();
             
