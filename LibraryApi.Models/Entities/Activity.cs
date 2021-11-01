@@ -1,5 +1,6 @@
 ﻿using LibraryApi.Models.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,8 +12,6 @@ namespace LibraryApi.Models.Entities
 {
     public class Activity : ITracking
     {
-        private IConfiguration _configuration;
-        private readonly int _day;
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         [ForeignKey(nameof(Book))]
@@ -25,12 +24,9 @@ namespace LibraryApi.Models.Entities
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
 
-        public Activity(IConfiguration configuration)
+        public Activity()
         {
-            _configuration = configuration;
-            _day = Int32.Parse(_configuration.GetSection("DaySettings").GetSection("dueIn").Value);
             RequestDate = DateTime.Now;
-            DueDate = DateTime.Now.AddDays(_day);
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
         }

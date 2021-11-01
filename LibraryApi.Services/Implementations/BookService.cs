@@ -9,24 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace LibraryApi.Services.Implementations
 {
     public class BookService : IBookService
     {
-        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Book> _bookRepo;
         private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
+        private readonly IOptions<DaySettings> _options;
 
-        public BookService(IConfiguration configuration, IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper)
+        public BookService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IMapper mapper, IOptions<DaySettings> options)
         {
-            _configuration = configuration;
             _unitOfWork = unitOfWork;
             _serviceFactory = serviceFactory;
             _bookRepo = unitOfWork.GetRepository<Book>();
             _mapper = mapper;
+            _options = options;
         }
 
         public async Task<IEnumerable<ViewBookDto>> GetBooksAsync()
@@ -91,10 +92,11 @@ namespace LibraryApi.Services.Implementations
             if (book is null)
                 return null;
 
-            var activity = new Activity(_configuration)
+            var activity = new Activity()
             {
                 BookId = bookId,
                 UserId = userId,
+                DueDate = DateTime.Now.AddDays(_options.Value.DueIn)
             };
 
             IActivityService activityService = _serviceFactory.GetService<IActivityService>();

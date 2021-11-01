@@ -1,4 +1,5 @@
 using LibraryApi.Extensions;
+using LibraryApi.Models.Entities;
 using LibraryApi.Models.Enumerators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,10 @@ namespace LibraryApi
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
             services.AddClaimsAuthorization();
-            services.RegisterServices();           
+            services.RegisterServices();
+
+            services.Configure<DaySettings>(Configuration.GetSection(DaySettings.SectionName));
+            services.AddOptions();
 
             // To access automapper from any assembly.
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
