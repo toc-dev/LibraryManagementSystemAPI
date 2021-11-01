@@ -61,8 +61,8 @@ namespace LibraryApi.Controllers
             if (book is null)
                 return BadRequest("Book is null or invalid");
 
-            var bookToDel = _mapper.Map<Book>(book);
-            _bookService.DeleteBook(bookToDel);
+            //var bookToDel  //_mapper.Map<Book>(book);
+            //_bookService.DeleteBook(bookToDel);
 
             return NoContent();
         }*/
