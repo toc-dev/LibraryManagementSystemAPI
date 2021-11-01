@@ -10,13 +10,13 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IBookService
     {
-        Task<Book> CreateBookAsync(Book book);
+        Task<Book> CreateBookAsync(BookForCreationDto book);
         Task<IEnumerable<ViewBookDto>> GetBooksByAuthorIdAsync(Guid id);
         Task<ViewBookDto> GetBookByIdAsync(Guid id);
         Task<Book> GetBookByIdForUpdateAsync(Guid id, bool trackChanges);
         Task<IEnumerable<ViewBookDto>> GetBooksAsync();
         Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
-        void UpdateBook(Book book);
+        void UpdateBook(Guid id, BookForUpdateDto bookForUpdateDto);
         void DeleteBook(Book book);
         Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId);
     }

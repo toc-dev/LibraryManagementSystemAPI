@@ -31,6 +31,7 @@ namespace LibraryApi
             services.AddClaimsAuthorization();
             services.RegisterServices();
 
+            // To accesss variables from appsettings.json through DaySettings Class
             services.Configure<DaySettings>(Configuration.GetSection(DaySettings.SectionName));
             services.AddOptions();
 
