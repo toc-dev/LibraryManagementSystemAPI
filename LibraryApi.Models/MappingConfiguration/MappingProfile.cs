@@ -19,9 +19,9 @@ namespace LibraryApi.Models.MappingConfiguration
             CreateMap<User, UserForRegistrationDTO>();
             
             CreateMap<Author, ViewAuthorDto>()
-                .ForMember(c => c.FullName, opt => opt.MapFrom(x => string.Join(' ', x.FirstName, x.LastName)));
+                .ForMember(c => c.FullName, opt => opt.MapFrom(x => string.Join(' ', x.FirstName, x.LastName))).ReverseMap();
 
-            CreateMap<AuthorForCreationDto, Author>();
+            CreateMap<AuthorForCreationDto, Author>().ReverseMap();
 
             CreateMap<AuthorForUpdateDto, Author>();
 
@@ -29,7 +29,7 @@ namespace LibraryApi.Models.MappingConfiguration
                 .ForMember(dest => dest.YearPublished,
                 opt => opt.MapFrom(src => src.YearPublished.Year)).ReverseMap();
 
-            CreateMap<BookForCreationDto, Book>();
+            CreateMap<BookForCreationDto, Book>().ReverseMap();
 
             CreateMap<BookForUpdateDto, Book>();
             CreateMap<UserForUpdateDTO, User>().ReverseMap();

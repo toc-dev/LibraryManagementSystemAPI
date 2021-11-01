@@ -13,6 +13,7 @@ namespace LibraryApi.Models.Dtos
         public string FirstName { get; set; }
         [Required(ErrorMessage = "LastName Required!")]
         public string LastName { get; set; }
+        [Required(ErrorMessage = "Email Required!")]
         [EmailAddress]
         public string Email { get; set; }
     }
