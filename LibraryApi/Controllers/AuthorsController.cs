@@ -39,8 +39,7 @@ namespace LibraryApi.Controllers
         {
             var authors = await authorService.GetAuthorsAsync();
 
-            var authorsDto = mapper.Map<IEnumerable<ViewAuthorDto>>(authors);
-            return Ok(authorsDto);
+            return Ok(authors);
         }
 
         [HttpGet("{id}", Name = "GetAuthor")]
@@ -49,8 +48,7 @@ namespace LibraryApi.Controllers
         {
             var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
 
-            var authorDto = mapper.Map<ViewAuthorDto>(author);
-            return Ok(authorDto);
+            return Ok(author);
         }
 
         [HttpPost]
@@ -58,12 +56,10 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> AddSingleAuthor([FromBody]AuthorForCreationDto authorForCreationDto)
         {
             if (authorForCreationDto == null) return BadRequest();
-            var author = mapper.Map<Author>(authorForCreationDto);
 
-            var addedAuthor = await authorService.CreateAuthorAsync(author);
-            var authorToReturn = mapper.Map<ViewAuthorDto>(addedAuthor);
+            var authorToReturn = await authorService.CreateAuthorAsync(authorForCreationDto);
 
-            return CreatedAtRoute("GetAuthor", new { id = authorToReturn.Id }, authorToReturn);
+            return CreatedAtRoute("GetAuthor", new { id = authorToReturn.Id },  authorToReturn);
         }
 
         [HttpPost("{id}/books")]
@@ -71,15 +67,13 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> AddAuthorBook(Guid id, [FromBody]BookForCreationDto bookForCreationDto)
         {
             if (bookForCreationDto == null) return BadRequest();
+
             var author = authorService.GetAuthorByIdAsync(id, trackChanges: false);
             if (author == null) return BadRequest("AuthorId is invalid or null!");
 
-            var book = mapper.Map<Book>(bookForCreationDto);
+            var book = await bookService.CreateBookAsync(bookForCreationDto);
 
-            var bookAdded = await bookService.CreateBookAsync(book);
-            var bookToReturn = mapper.Map<ViewBookDto>(bookAdded);
-
-            return CreatedAtRoute("GetAuthor", new { id = bookToReturn.AuthorId }, bookToReturn);
+            return CreatedAtRoute("GetAuthor", new { id = book.AuthorId }, book);
         }
 
         [HttpPut("{id}")]
@@ -91,19 +85,16 @@ namespace LibraryApi.Controllers
             var author = await authorService.GetAuthorByIdAsync(id, trackChanges: true);
             if (author == null) return BadRequest("Author dosen't exist!");
 
-            mapper.Map(authorForUpdateDto, author);
-            unitOfWork.SaveChanges();
+            authorService.UpdateAuthor(id, authorForUpdateDto);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> DeleteAuthor(Guid id)
+        public IActionResult DeleteAuthor(Guid id)
         {
-            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
-            authorService.DeleteAuthor(author);
-            unitOfWork.SaveChanges();
+            authorService.DeleteAuthor(id);
 
             return NoContent();
         }
@@ -128,6 +119,7 @@ namespace LibraryApi.Controllers
         public async Task<IActionResult> GetAuthorBooks(Guid id)
         {
             var books = await bookService.GetBooksByAuthorIdAsync(id);
+            
             if (books == null) return BadRequest("AuthorId is invalid!");
 
             return Ok(books);

@@ -1,4 +1,5 @@
-﻿using LibraryApi.Models.Entities;
+﻿using LibraryApi.Models.Dtos;
+using LibraryApi.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IAuthorService
     {
-        Task<Author> CreateAuthorAsync(Author author);
-        Task<Author> GetAuthorByIdAsync(Guid authorId, bool trackChanges);
-        Task<IEnumerable<Author>> GetAuthorsAsync();
-        void UpdateAuthor(Author author);
-        void DeleteAuthor(Author author);
+        Task<Author> CreateAuthorAsync(AuthorForCreationDto author);
+        Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId, bool trackChanges);
+        Task<IEnumerable<ViewAuthorDto>> GetAuthorsAsync();
+        void UpdateAuthor(Guid id, AuthorForUpdateDto author);
+        void DeleteAuthor(Guid id);
     }
 }

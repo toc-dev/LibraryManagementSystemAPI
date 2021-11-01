@@ -54,9 +54,13 @@ namespace LibraryApi.Services.Implementations
             return _mapper.Map<IEnumerable<ViewBookDto>>(books);
         }
 
-        public async Task<Book> CreateBookAsync(Book book)
+        public async Task<Book> CreateBookAsync(BookForCreationDto book)
         {
-            return await _bookRepo.AddAsync(book);
+            var bookToAdd = _mapper.Map<Book>(book);
+
+            var bookAdded = await _bookRepo.AddAsync(bookToAdd);
+
+            return bookAdded;
         }
 
         public async Task<IEnumerable<ViewBookDto>> GetBooksByAuthorIdAsync(Guid id)
@@ -91,7 +95,7 @@ namespace LibraryApi.Services.Implementations
             if (book is null)
                 return null;
 
-            var activity = new Activity(_configuration)
+            var activity = new Activity()
             {
                 BookId = bookId,
                 UserId = userId,

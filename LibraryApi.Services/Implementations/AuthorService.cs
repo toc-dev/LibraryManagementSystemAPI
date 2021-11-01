@@ -1,4 +1,6 @@
-﻿using LibraryApi.Data.Interfaces;
+﻿using AutoMapper;
+using LibraryApi.Data.Interfaces;
+using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using System;
@@ -13,35 +15,59 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Author> _authorRepo;
+        private readonly IMapper _mapper;
 
-        public AuthorService(IUnitOfWork unitOfWork)
+        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _authorRepo = unitOfWork.GetRepository<Author>();
+            _mapper = mapper;
         }
-        public async Task<Author> CreateAuthorAsync(Author author)
+        public async Task<Author> CreateAuthorAsync(AuthorForCreationDto author)
         {
-            return await _authorRepo.AddAsync(author);
+            var authorToAdd = _mapper.Map<Author>(author);
+
+            var authorAdded = await _authorRepo.AddAsync(authorToAdd);
+   
+            return authorAdded;
         }
 
-        public void DeleteAuthor(Author author)
+        public async void DeleteAuthor(Guid id)
         {
-            _authorRepo.Delete(author);
-        }
+            var author = await _authorRepo.GetByIdAsync(id);
 
-        public async Task<Author> GetAuthorByIdAsync(Guid authorId, bool trackChanges)
-        {
-            return await _authorRepo.GetByIdAsync(authorId);
-        }
+            author.IsDeleted = true;
 
-        public async Task<IEnumerable<Author>> GetAuthorsAsync()
-        {
-            return await _authorRepo.GetAllAsync();
-        }
-
-        public void UpdateAuthor(Author author)
-        {
             _authorRepo.Update(author);
+
+            _unitOfWork.SaveChanges();
+        }
+
+        public async Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId, bool trackChanges)
+        {
+            var author = await _authorRepo.GetByIdAsync(authorId);
+
+            var authorToReturn = _mapper.Map<ViewAuthorDto>(author);
+
+            return authorToReturn;
+        }
+
+        public async Task<IEnumerable<ViewAuthorDto>> GetAuthorsAsync()
+        {
+            var authors = await _authorRepo.GetAllAsync();
+
+            var authorsToReturn = _mapper.Map<IEnumerable<ViewAuthorDto>>(authors);
+
+            return authorsToReturn;
+        }
+
+        public async void UpdateAuthor(Guid id, AuthorForUpdateDto author)
+        {
+            var authorToReturn = await GetAuthorByIdAsync(id, trackChanges: true);
+
+            _mapper.Map(author, authorToReturn);
+
+            _unitOfWork.SaveChanges();
         }
     }
 }

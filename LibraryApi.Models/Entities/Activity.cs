@@ -25,7 +25,7 @@ namespace LibraryApi.Models.Entities
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
 
-        public Activity(IConfiguration configuration)
+        /*public Activity(IConfiguration configuration)
         {
             _configuration = configuration;
             _day = Int32.Parse(_configuration.GetSection("DaySettings").GetSection("dueIn").Value);
@@ -33,6 +33,6 @@ namespace LibraryApi.Models.Entities
             DueDate = DateTime.Now.AddDays(_day);
             CreatedAt = DateTime.Now;
             UpdatedAt = DateTime.Now;
-        }
+        }*/
     }
 }

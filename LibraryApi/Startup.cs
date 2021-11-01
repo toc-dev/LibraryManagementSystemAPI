@@ -28,7 +28,7 @@ namespace LibraryApi
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
             services.AddClaimsAuthorization();
-            services.RegisterServices();           
+            services.RegisterServices();
 
             // To access automapper from any assembly.
             services.AddAutoMapper((AppDomain.CurrentDomain.GetAssemblies()));
