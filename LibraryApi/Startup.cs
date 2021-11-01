@@ -1,6 +1,7 @@
 using LibraryApi.Extensions;
 using LibraryApi.Models.Entities;
 using LibraryApi.Models.Enumerators;
+using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NLog;
 using System;
+using System.IO;
 
 namespace LibraryApi
 {
@@ -17,6 +20,8 @@ namespace LibraryApi
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
             Configuration = configuration;
         }
 
@@ -27,6 +32,7 @@ namespace LibraryApi
         {
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
+            services.ConfigureLoggerService();
             services.ConfigureJWT(Configuration);
             services.AddClaimsAuthorization();
             services.RegisterServices();
@@ -46,7 +52,7 @@ namespace LibraryApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +60,8 @@ namespace LibraryApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryApi v1"));
             }
+
+            app.ConfigureExceptionHandler(logger);
 
             app.UseRouting();
 

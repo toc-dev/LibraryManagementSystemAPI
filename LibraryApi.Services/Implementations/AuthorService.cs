@@ -16,19 +16,21 @@ namespace LibraryApi.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Author> _authorRepo;
         private readonly IMapper _mapper;
+        private readonly ILoggerManager _logger;
 
-        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper, ILoggerManager logger)
         {
             _unitOfWork = unitOfWork;
             _authorRepo = unitOfWork.GetRepository<Author>();
             _mapper = mapper;
+            _logger = logger;
         }
         public async Task<Author> CreateAuthorAsync(AuthorForCreationDto author)
         {
             var authorToAdd = _mapper.Map<Author>(author);
 
             var authorAdded = await _authorRepo.AddAsync(authorToAdd);
-   
+            
             return authorAdded;
         }
 
@@ -36,9 +38,9 @@ namespace LibraryApi.Services.Implementations
         {
             var author = await _authorRepo.GetByIdAsync(id);
 
-            /* Gideon's Review
-             * Check if author is null before proceeding to update it
-             */
+            if (author == null)
+                _logger.LogError("Author is null or invalid");
+
             author.IsDeleted = true;
 
             _authorRepo.Update(author);
@@ -46,15 +48,12 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
-        /* Gideon's Review
-         * Check for null where necessary
-         * GetAuthorByIdAsync(),
-         * GetAuthorsAsync()
-         * UpdateAuthor()
-         */
         public async Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId)
         {
             var author = await _authorRepo.GetByIdAsync(authorId);
+
+            if (author == null)
+                _logger.LogError("Author is null or invalid");
 
             var authorToReturn = _mapper.Map<ViewAuthorDto>(author);
 
@@ -70,6 +69,9 @@ namespace LibraryApi.Services.Implementations
         {
             var authors = await _authorRepo.GetAllAsync();
 
+            if (authors == null)
+                _logger.LogError("Authors are null or invalid");
+
             var authorsToReturn = _mapper.Map<IEnumerable<ViewAuthorDto>>(authors);
 
             return authorsToReturn;
@@ -78,6 +80,9 @@ namespace LibraryApi.Services.Implementations
         public async void UpdateAuthor(Guid id, AuthorForUpdateDto author)
         {
             var authorToReturn = await GetAuthorForUpdateAsync(id, trackChanges: true);
+
+            if (authorToReturn == null)
+                _logger.LogError("Author is null or invalid");
 
             _mapper.Map(author, authorToReturn);
 

@@ -123,5 +123,8 @@ namespace LibraryApi.Extensions
 
             return Guid.Parse(userId);
         }
+
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+ services.AddScoped<ILoggerManager, LoggerManager>();
     }
 }

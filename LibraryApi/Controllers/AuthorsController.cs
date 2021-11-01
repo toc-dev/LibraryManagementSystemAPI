@@ -18,22 +18,13 @@ namespace LibraryApi.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService authorService;
-        private readonly IMapper mapper;
         private readonly IBookService bookService;
-        private readonly IUnitOfWork unitOfWork;
 
-        /* Gideon's Review
-         * Remove properties that are no longer in use, "mapper", "unitOfWork"
-         */
-        public AuthorsController(IAuthorService authorService, 
-            IMapper mapper, 
-            IBookService bookService,
-            IUnitOfWork unitOfWork)
+
+        public AuthorsController(IAuthorService authorService, IBookService bookService)
         {
             this.authorService = authorService;
-            this.mapper = mapper;
             this.bookService = bookService;
-            this.unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -115,9 +106,6 @@ namespace LibraryApi.Controllers
             var author = await authorService.GetAuthorByIdAsync(authorId);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
-            /* Gideon's Review
-             * the line below should be checked first, move it to be the first.
-            */
             if (bookForUpdate == null) return BadRequest("Book is null"); 
 
             bookService.UpdateBook(id, bookForUpdate);

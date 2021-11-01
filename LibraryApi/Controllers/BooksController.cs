@@ -50,21 +50,17 @@ namespace LibraryApi.Controllers
             return Ok(request);
         }
 
-        /* Gideon's Review
-            KCM please refactor this method
-         */
-        /*[HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Policy = "RequireAdminOrAuthorRole")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
-            var book = await _bookService.GetBookByIdAsync(id);
-            if (book is null)
-                return BadRequest("Book is null or invalid");
+            var book = await _bookService.GetBookByIdForUpdateAsync(id, trackChanges: false);
 
-            //var bookToDel  //_mapper.Map<Book>(book);
-            //_bookService.DeleteBook(bookToDel);
+            if (book is null) return BadRequest("Book is null or invalid");
+
+            _bookService.DeleteBook(book);
 
             return NoContent();
-        }*/
+        }
     }
 }
