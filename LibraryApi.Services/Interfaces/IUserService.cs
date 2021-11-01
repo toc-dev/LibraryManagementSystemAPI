@@ -12,6 +12,7 @@ namespace LibraryApi.Services.Interfaces
 {
     public interface IUserService
     {
+        Task<List<User>> GetAllUsers();
         Task<(IdentityResult, User)> CreateUserAsync(UserForRegistrationDTO userForRegistration);
         Task<User> PatchUserAsync(string id, JsonPatchDocument<UserForUpdateDTO> userForUpdate);
         Task<User> FindUserAsync(string id);

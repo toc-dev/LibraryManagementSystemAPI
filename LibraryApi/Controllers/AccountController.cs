@@ -47,17 +47,9 @@ namespace LibraryApi.Controllers
         
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userService.GetAllUsers();
             return Ok(users);
         }
-
-        // Gideon's Review
-        /* I love what you did with the tuples, 
-         * but remember Davidson suggested to Alex 
-         * that she could parse those values to a newly created class
-         * and access that class as a return type.
-         * It's up to you to decide though.
-         */
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
         {

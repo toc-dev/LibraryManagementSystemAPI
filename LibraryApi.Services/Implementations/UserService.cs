@@ -6,6 +6,7 @@ using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,12 @@ namespace LibraryApi.Services.Implementations
             await _userManager.AddToRoleAsync(user, userForRegistration.Role.ToString());
             return (createUser, user);
 
+        }
+
+        public async Task<List<User>> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return users;
         }
 
         public async Task<User> PatchUserAsync(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
