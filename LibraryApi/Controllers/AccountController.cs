@@ -25,20 +25,17 @@ namespace LibraryApi.Controllers
     {
         private readonly IdentityContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
         private readonly IAuthenticationManager _authenticationManager;
         private readonly IUserService _userService;
         
 
         public AccountController(IdentityContext context,
-            IMapper mapper,
             UserManager<User> userManager,
             IUserService userService,
             IAuthenticationManager authenticationManager)
             
         {
             _context = context;
-            _mapper = mapper;
             _userManager = userManager;
             _authenticationManager = authenticationManager;
             _userService = userService;
@@ -48,12 +45,6 @@ namespace LibraryApi.Controllers
         [HttpGet]
         [Route("users"), Authorize(Policy = "RequireAdminRole")]
         
-        // Gideon's Review
-        /*
-            Don't use UserManager<User> _userManager here since you have it in the UserService 
-            Move this implementation to the UserService Class
-            Remove all the items not used in the constructor, e.g the mapper
-         */
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -78,7 +69,6 @@ namespace LibraryApi.Controllers
                 foreach (var error in result.Item1.Errors) ModelState.TryAddModelError(error.Code, error.Description);
                 return BadRequest(ModelState);
             }
-            await _userManager.AddToRoleAsync(result.Item2, userForRegistration.Role.ToString());
 
             return Ok(result.Item2);
         }
@@ -86,7 +76,7 @@ namespace LibraryApi.Controllers
 
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO user)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] UserForAuthenticationDTO user)
         {
             if (user == null) return BadRequest("Invalid!");
             if (!await _authenticationManager.ValidateUser(user))
@@ -96,18 +86,10 @@ namespace LibraryApi.Controllers
             return Ok(new { Token = await _authenticationManager.CreateToken() });
         }
 
-        // Gideon's Review
-        /* It's more conventional to use "user/{id}" as the route_name 
-        */
-        [HttpGet("getuser/{id}")]
-        public async Task<IActionResult> GetUser(string id)
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserAsync(string id)
         {
-            /*
-             * Move this implementation to the UserService Class
-             * cos we don't want you using UserManager<User> _userManager here,
-             * since you have it in the UserService 
-            */
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userService.FindUserAsync(id);
             if (user == null)
             {
                 return BadRequest("User not found!");
@@ -115,33 +97,23 @@ namespace LibraryApi.Controllers
             return Ok(user);
         }
 
-        // Gideon's Review
-        /* Since it's a PATCH request, there's no need for "update" in the route name
-         * it's more conventional to simply use {id}
-        */
-            [HttpPatch("update/{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
             if (userForUpdate == null) return BadRequest("Object is null");
-            var user = await _userService.PatchUser(id, userForUpdate);
+            var user = await _userService.PatchUserAsync(id, userForUpdate);
             if (user == null) return BadRequest("User not found!");
             await _userManager.UpdateAsync(user);
 
             return Ok(user);
         }
 
-        // Gideon's Review
-        /* Since it's a DELETE request, there's no need for "delete" in the route name
-         * it's more conventional to simply use {id}
-        */
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userService.DeleteUserAsync(id);
             if (user == null) return BadRequest("User not found!");
-            var rolesForUser = await _userManager.GetRolesAsync(user);
-            await _userManager.DeleteAsync(user);
-            return Ok(user);
+            return Ok($"{user.UserName} deleted");
         }
     }
 }

@@ -13,6 +13,8 @@ namespace LibraryApi.Services.Interfaces
     public interface IUserService
     {
         Task<(IdentityResult, User)> CreateUserAsync(UserForRegistrationDTO userForRegistration);
-        Task<User> PatchUser(string id, JsonPatchDocument<UserForUpdateDTO> userForUpdate);
+        Task<User> PatchUserAsync(string id, JsonPatchDocument<UserForUpdateDTO> userForUpdate);
+        Task<User> FindUserAsync(string id);
+        Task<User> DeleteUserAsync(string id);
     }
 }

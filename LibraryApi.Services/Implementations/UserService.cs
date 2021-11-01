@@ -35,13 +35,14 @@ namespace LibraryApi.Services.Implementations
         public async Task<(IdentityResult, User)> CreateUserAsync([FromBody] UserForRegistrationDTO userForRegistration)
         {
             var user = _mapper.Map<User>(userForRegistration);
-            var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+            var createUser = await _userManager.CreateAsync(user, userForRegistration.Password);
 
-            return (result, user);
+            await _userManager.AddToRoleAsync(user, userForRegistration.Role.ToString());
+            return (createUser, user);
 
         }
 
-        public async Task<User> PatchUser(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
+        public async Task<User> PatchUserAsync(string id, [FromBody] JsonPatchDocument<UserForUpdateDTO> userForUpdate)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
@@ -53,6 +54,26 @@ namespace LibraryApi.Services.Implementations
             _mapper.Map(userToUpdate, user);
 
             return (user);
+        }
+
+        public async Task<User> FindUserAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return user;
+            return user;
+        }
+        public async Task<User> DeleteUserAsync(string id)
+        {
+            var user = await FindUserAsync(id);
+            if (user == null)
+            {
+                return user;
+            }
+            await _userManager.GetRolesAsync(user);
+            await _userManager.DeleteAsync(user);
+            return user;
+
+
         }
     }
 }
