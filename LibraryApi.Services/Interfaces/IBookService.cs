@@ -16,7 +16,7 @@ namespace LibraryApi.Services.Interfaces
         Task<Book> GetBookByIdForUpdateAsync(Guid id, bool trackChanges);
         Task<IEnumerable<ViewBookDto>> GetBooksAsync();
         Task<IEnumerable<ViewBookDto>> GetBooksByCategoryAsync(string category);
-        void UpdateBook(Book book);
+        void UpdateBook(Guid id, BookForUpdateDto bookForUpdateDto);
         void DeleteBook(Book book);
         Task<ViewActivityDto> RequestBook(Guid userId, Guid bookId);
     }

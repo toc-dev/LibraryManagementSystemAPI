@@ -46,7 +46,7 @@ namespace LibraryApi.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> GetSingleAuthor(Guid id)
         {
-            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: false);
+            var author = await authorService.GetAuthorByIdAsync(id);
 
             return Ok(author);
         }
@@ -68,7 +68,7 @@ namespace LibraryApi.Controllers
         {
             if (bookForCreationDto == null) return BadRequest();
 
-            var author = authorService.GetAuthorByIdAsync(id, trackChanges: false);
+            var author = authorService.GetAuthorByIdAsync(id);
             if (author == null) return BadRequest("AuthorId is invalid or null!");
 
             var book = await bookService.CreateBookAsync(bookForCreationDto);
@@ -82,7 +82,7 @@ namespace LibraryApi.Controllers
         {
             if (authorForUpdateDto == null) return BadRequest("authorDto is null!");
 
-            var author = await authorService.GetAuthorByIdAsync(id, trackChanges: true);
+            var author = await authorService.GetAuthorByIdAsync(id);
             if (author == null) return BadRequest("Author dosen't exist!");
 
             authorService.UpdateAuthor(id, authorForUpdateDto);
@@ -103,14 +103,13 @@ namespace LibraryApi.Controllers
         [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto bookForUpdate, Guid id)
         {
-            var author = await authorService.GetAuthorByIdAsync(authorId, trackChanges: false);
+            var author = await authorService.GetAuthorByIdAsync(authorId);
             if (author == null) return BadRequest("AuthorId is invalid!");
 
             if (bookForUpdate == null) return BadRequest("Book is null");
-            var book = await bookService.GetBookByIdForUpdateAsync(id, trackChanges: true);
 
-            mapper.Map(bookForUpdate, book);
-            unitOfWork.SaveChanges();
+            bookService.UpdateBook(id, bookForUpdate);
+
             return NoContent();
         }
 

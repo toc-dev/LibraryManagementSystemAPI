@@ -11,7 +11,8 @@ namespace LibraryApi.Services.Interfaces
     public interface IAuthorService
     {
         Task<Author> CreateAuthorAsync(AuthorForCreationDto author);
-        Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId, bool trackChanges);
+        Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId);
+        Task<Author> GetAuthorForUpdateAsync(Guid id, bool trackChanges);
         Task<IEnumerable<ViewAuthorDto>> GetAuthorsAsync();
         void UpdateAuthor(Guid id, AuthorForUpdateDto author);
         void DeleteAuthor(Guid id);

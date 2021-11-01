@@ -79,9 +79,11 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
-        public void UpdateBook(Book book)
+        public async void UpdateBook(Guid id, BookForUpdateDto bookForUpdateDto)
         {
-            _bookRepo.Update(book);
+            var book = await GetBookByIdForUpdateAsync(id, trackChanges: true);
+
+            _mapper.Map(bookForUpdateDto, book);
             _unitOfWork.SaveChanges();
         }
 

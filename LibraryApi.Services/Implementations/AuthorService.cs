@@ -43,13 +43,18 @@ namespace LibraryApi.Services.Implementations
             _unitOfWork.SaveChanges();
         }
 
-        public async Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId, bool trackChanges)
+        public async Task<ViewAuthorDto> GetAuthorByIdAsync(Guid authorId)
         {
             var author = await _authorRepo.GetByIdAsync(authorId);
 
             var authorToReturn = _mapper.Map<ViewAuthorDto>(author);
 
             return authorToReturn;
+        }
+
+        public async Task<Author> GetAuthorForUpdateAsync(Guid id, bool trackChanges)
+        {
+            return await _authorRepo.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<ViewAuthorDto>> GetAuthorsAsync()
@@ -63,7 +68,7 @@ namespace LibraryApi.Services.Implementations
 
         public async void UpdateAuthor(Guid id, AuthorForUpdateDto author)
         {
-            var authorToReturn = await GetAuthorByIdAsync(id, trackChanges: true);
+            var authorToReturn = await GetAuthorForUpdateAsync(id, trackChanges: true);
 
             _mapper.Map(author, authorToReturn);
 
