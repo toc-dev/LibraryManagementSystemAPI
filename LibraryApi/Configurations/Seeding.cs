@@ -84,7 +84,7 @@ namespace LibraryApi
 
             var createUser2 = await _userManager.CreateAsync(user2, User2Password);
             if (createUser2.Succeeded) 
-                await _userManager.AddToRoleAsync(user2, AppRole.Author.ToString());
+                await _userManager.AddToRoleAsync(user2, AppRole.User.ToString());
 
             var user3 = await _userManager.FindByNameAsync(User3);
             if (user3 != null) return;
@@ -106,6 +106,49 @@ namespace LibraryApi
             var createUser3 = await _userManager.CreateAsync(user3, User3Password);
             if (createUser3.Succeeded)
                 await _userManager.AddToRoleAsync(user3, AppRole.User.ToString());
+        }
+
+        public static async void SeedCategory(IApplicationBuilder app)
+        {
+            var context = app.ApplicationServices.CreateScope()
+                .ServiceProvider.GetRequiredService<IdentityContext>();
+
+            if ((await context.Database.GetPendingMigrationsAsync()).Any())
+                await context.Database.MigrateAsync();
+
+            if (!context.Categories.Any()) return;
+
+            var categories = new List<Category> {
+                new Category
+                {
+                    Id = new Guid("8bde71e7-b24a-42cd-ad44-08d98a13616c"),
+                    Name = "Motivation",
+                    
+                },
+
+                new Category
+                {
+                    Id = new Guid("44935b91-3283-4f39-f08d-08d98a1078df"),
+                    Name = "Non-fiction",
+                    
+                },
+
+                new Category
+                {
+                    Id = new Guid("dff0527f-8f24-4402-215f-08d98a13c3e8"),
+                    Name = "Career",
+                    
+                },
+
+                new Category
+                {
+                    Id = new Guid("6007d5fa-3a6e-436d-8854-08d98a27ad68"),
+                    Name = "Sales",
+                    
+                }
+            };
+
+            await context.Categories.AddRangeAsync(categories);
         }
 
         private static async Task CreateRole(string name)

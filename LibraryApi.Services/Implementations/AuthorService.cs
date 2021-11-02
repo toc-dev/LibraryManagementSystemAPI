@@ -2,7 +2,9 @@
 using LibraryApi.Data.Interfaces;
 using LibraryApi.Models.Dtos;
 using LibraryApi.Models.Entities;
+using LibraryApi.Models.Enumerators;
 using LibraryApi.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +17,40 @@ namespace LibraryApi.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Author> _authorRepo;
+        private readonly UserManager<User> _userManager;
+        private readonly IServiceFactory _serviceFactory;
         private readonly IMapper _mapper;
         private readonly ILoggerManager _logger;
 
-        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper, ILoggerManager logger)
+        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper, ILoggerManager logger,
+            IServiceFactory serviceFactory, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _authorRepo = unitOfWork.GetRepository<Author>();
+            _serviceFactory = serviceFactory;
+            _userManager = userManager;
             _mapper = mapper;
             _logger = logger;
         }
+
         public async Task<Author> CreateAuthorAsync(AuthorForCreationDto author)
         {
-            var authorToAdd = _mapper.Map<Author>(author);
+            var userService = _serviceFactory.GetService<IUserService>();
+
+            var user = await userService.FindUserAsync(author.UserId);
+
+            if (user is null) return null;
+
+            var authorToAdd = new Author
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+            };
 
             var authorAdded = await _authorRepo.AddAsync(authorToAdd);
-            
+            await _userManager.AddToRoleAsync(user, AppRole.Author.ToString());
+
             return authorAdded;
         }
 

@@ -9,15 +9,22 @@ using LibraryApi.Models.Interfaces;
 
 namespace LibraryApi.Models.Entities
 {
-    public class User : IdentityUser, ITracking
+    public class User : IdentityUser, ITracking, ISoftDelete
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public User()
+        {
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+        }
     }
 }
