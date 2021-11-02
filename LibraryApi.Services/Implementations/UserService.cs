@@ -22,15 +22,18 @@ namespace LibraryApi.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly ILoggerManager _loggerManager;
 
         public UserService(IUnitOfWork unitOfWork,
             UserManager<User> userManager,
-            IMapper mapper
+            IMapper mapper,
+            ILoggerManager loggerManager
             )
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
+            _loggerManager = loggerManager;
         }
 
         public async Task<(IdentityResult, User)> CreateUserAsync([FromBody] UserForRegistrationDTO userForRegistration)
@@ -54,6 +57,7 @@ namespace LibraryApi.Services.Implementations
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
+                _loggerManager.LogError("User does not exist");
                 return user;
             }
             var userToUpdate = _mapper.Map<UserForUpdateDTO>(user);
@@ -66,7 +70,11 @@ namespace LibraryApi.Services.Implementations
         public async Task<User> FindUserAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return user;
+            if (user == null)
+            {
+                _loggerManager.LogError("User does not exist");
+                return user;
+            }
             return user;
         }
         public async Task<User> DeleteUserAsync(string id)
@@ -74,6 +82,7 @@ namespace LibraryApi.Services.Implementations
             var user = await FindUserAsync(id);
             if (user == null)
             {
+                _loggerManager.LogError("User does not exist");
                 return user;
             }
             await _userManager.GetRolesAsync(user);
