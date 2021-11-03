@@ -75,6 +75,7 @@ namespace LibraryApi
             });
 
             Seeding.SeedUser(app);
+            Seeding.SeedCategory(app);
         }
     }
 }

@@ -10,16 +10,7 @@ namespace LibraryApi.Models.Dtos
 {
     public class AuthorForCreationDto
     {
-        [Required(ErrorMessage = "FirstName Required!")]
-        public string FirstName { get; set; }
-        [Required(ErrorMessage = "LastName Required!")]
-        public string LastName { get; set; }
-        [Required(ErrorMessage = "Email Required!")]
-        [EmailAddress]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Gender Required!")]
-        public Gender Gender { get; set; }
-        [Required(ErrorMessage = "DateOfBirth Required!")]
-        public DateTime DateOfBirth { get; set; }
+        [Required(ErrorMessage = "UserId Required!")]
+        public string UserId { get; set; }
     }
 }

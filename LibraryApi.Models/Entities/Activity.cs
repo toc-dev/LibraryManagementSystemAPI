@@ -10,6 +10,13 @@ namespace LibraryApi.Models.Entities
 {
     public class Activity : ITracking
     {
+        public Activity()
+        {
+            RequestDate = DateTime.Now;
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+        }
+
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         [ForeignKey(nameof(Book))]
@@ -22,11 +29,5 @@ namespace LibraryApi.Models.Entities
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
 
-        public Activity()
-        {
-            RequestDate = DateTime.Now;
-            CreatedAt = DateTime.Now;
-            UpdatedAt = DateTime.Now;
-        }
     }
 }

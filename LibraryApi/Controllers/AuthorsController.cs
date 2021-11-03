@@ -55,6 +55,8 @@ namespace LibraryApi.Controllers
 
             var authorToReturn = await authorService.CreateAuthorAsync(authorForCreationDto);
 
+            if (authorToReturn is null) return BadRequest("Invalid User Id!");
+
             return CreatedAtRoute("GetAuthor", new { id = authorToReturn.Id },  authorToReturn);
         }
 
