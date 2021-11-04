@@ -5,6 +5,7 @@ using LibraryApi.Models.Entities;
 using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,13 @@ namespace LibraryApi.Controllers
     {
         private readonly IAuthorService authorService;
         private readonly IBookService bookService;
+        private readonly IMapper mapper;
 
-
-        public AuthorsController(IAuthorService authorService, IBookService bookService)
+        public AuthorsController(IAuthorService authorService, IBookService bookService, IMapper mapper)
         {
             this.authorService = authorService;
             this.bookService = bookService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -73,12 +75,7 @@ namespace LibraryApi.Controllers
         }
 
 
-        /* Gideon's Review
-         * Davidson advised during the review to use Patch instead of Put
-         * To be able to update properties excluding the "Name" property in the Author class.
-         * Please implement the Update method using PATCH
-         */
-        [HttpPut("{id}")]
+       /* [HttpPut("{id}")]
         [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody]AuthorForUpdateDto authorForUpdateDto)
         {
@@ -88,6 +85,24 @@ namespace LibraryApi.Controllers
             if (author == null) return BadRequest("Author dosen't exist!");
 
             authorService.UpdateAuthor(id, authorForUpdateDto);
+
+            return NoContent();
+        }*/
+
+        [HttpPatch("{id}")]
+        [Authorize(Policy = "RequireAuthorOrAdminRole")]
+        public async Task<IActionResult> UpdateAuthorL(Guid id, [FromBody]JsonPatchDocument<AuthorForUpdateDto> patchDoc)
+        {
+            if (patchDoc == null) return BadRequest("Author details is null");
+
+            var author = await authorService.GetAuthorForUpdateAsync(id, trackChanges: true);
+            if (author == null) return BadRequest("Author is null or invalid!");
+
+            var authorToUpdate = mapper.Map<AuthorForUpdateDto>(author);
+
+            patchDoc.ApplyTo(authorToUpdate);
+            
+            mapper.Map(authorToUpdate, author);
 
             return NoContent();
         }
@@ -105,10 +120,10 @@ namespace LibraryApi.Controllers
         [Authorize(Policy = "RequireAuthorOrAdminRole")]
         public async Task<IActionResult> UpdateAuthorBook(Guid authorId, [FromBody]BookForUpdateDto bookForUpdate, Guid id)
         {
+            if (bookForUpdate == null) return BadRequest("Book is null");
+
             var author = await authorService.GetAuthorByIdAsync(authorId);
             if (author == null) return BadRequest("AuthorId is invalid!");
-
-            if (bookForUpdate == null) return BadRequest("Book is null"); 
 
             bookService.UpdateBook(id, bookForUpdate);
 
